@@ -48,6 +48,7 @@ bool Board6x7::update_board(int x, int y, char symbol) {
             this->n_moves++;
             this->board[x][y] = toupper(symbol);
         }
+        std::cout << "\x1b[16;1H";
         return true;
     }
     return false;
@@ -169,12 +170,12 @@ Four_In_A_Row_Player::Four_In_A_Row_Player(std::string name, char symbol) : Play
 Four_In_A_Row_Player::Four_In_A_Row_Player(char symbol) : Player<char>(symbol) {}
 
 void Four_In_A_Row_Player::getmove(int &x, int &y) {
-    std::cout << "\x1b[K";
     do{
         std::cout << "Please enter a your move x (0 to 5) and y (0 to 6) separated by spaces: ";
         std::cin >> x >> y;
     } while(inputStreamFailing());
-    std::cout << "\x1b[14A";
+    std::cout << "\x1b[1A";
+    std::cout << "\x1b[K";
 }
 
 // End Four_In_A_Row_Player class
@@ -186,5 +187,4 @@ void Four_In_A_Row_Random_Player::getmove(int &x, int &y) {
     std::srand(std::time(nullptr));
     x = std::rand() % 6;
     y = std::rand() % 7;
-    std::cout << "\x1b[14;1H";
 }
