@@ -1,6 +1,6 @@
 
-#ifndef _3X3X_O_H
-#define _3X3X_O_H
+#ifndef MISERE_H
+#define MISERE_H
 
 #include "BoardGame_Classes.h"
 
@@ -188,5 +188,6 @@ void misere_Random_Player<T>::getmove(int& x, int& y) {
 
 
 
-#endif //_3X3X_O_H
+#endif //MISERE_H
+
 
