@@ -92,7 +92,8 @@ void misere_board<T>::display_board() {
     for (int i = 0; i < this->rows; ++i) {
         cout << setw(2) << left << i + 1 << '|';
         for (int j = 0; j < this->columns; ++j) {
-            cout << setw(2) << left << this->board[i][j] << '|';
+            if(this->board[i][j] !=0) cout << setw(2) << left << this->board[i][j] << '|';
+            else cout << "  |";
         }
         cout << '\n';
         cout <<"   " <<string(9,'-') << '\n';
