@@ -2,6 +2,8 @@
 #include "fourInaRow.h"
 #include <string>
 #include "numericalTicTacToe.h"
+#include "5x5X_O.h"
+#include "misere.h"
 
 void getNameAndType(std::string& player1, std::string& player2, int& type1 , int& type2)
 {
@@ -28,7 +30,79 @@ void getNameAndType(std::string& player1, std::string& player2, int& type1 , int
     } while(type2String.length() > 1 || type2String[0] > '2' || type2String[0] < '1');
     type2 = type2String[0] - '0';
 }
-
+void misere(){
+    Player<char>* players[2];
+    Board<char>* B = new misere_board<char>();
+    string player1Name, player2Name;
+    int type1,type2;
+    getNameAndType(player1Name,player2Name, type1, type2);
+    switch(type1) {
+        case 1:
+            players[0] = new misere_Player<char>(player1Name, 'X',B);
+            break;
+        case 2:
+            players[0] = new misere_Random_Player<char>('X',B);
+            break;
+        default:
+            cout << "Invalid choice for Player 1. Exiting the game.\n";
+            return;
+    }
+    switch(type2) {
+        case 1:
+            players[0] = new misere_Player<char>(player1Name, 'X',B);
+            break;
+        case 2:
+            players[0] = new misere_Random_Player<char>('X',B);
+            break;
+        default:
+            cout << "Invalid choice for Player 1. Exiting the game.\n";
+            return;
+    }
+    GameManager<char> x_o_game(B, players);
+    x_o_game.run();
+    delete B;
+    for (auto & player : players) {
+        delete player;
+    }
+}
+void _5x5(){
+    Player<char>* players[2];
+    string player1Name, player2Name;
+    int type1, type2;
+    std::cout << "----------------------------\n";
+    std::cout << "|    Welcome to 5x5 XO     |\n";
+    std::cout << "----------------------------\n";
+    getNameAndType(player1Name,player2Name, type1, type2);
+    switch (type1) {
+        case 1:
+            players[0] = new _5x5_player<char>(player1Name, 'X');
+            break;
+        case 2:
+            players[0] = new _5x5_Random<char>('X');
+            break;
+        default:
+            cout << "Invalid choice for Player 1. Exiting the game.\n";
+            return;
+    }
+    switch (type2) {
+        case 1:
+            players[0] = new _5x5_player<char>(player1Name, 'X');
+            break;
+        case 2:
+            players[0] = new _5x5_Random<char>('X');
+            break;
+        default:
+            cout << "Invalid choice for Player 1. Exiting the game.\n";
+            return;
+    }
+    Board<char>* B = new _5x5_board<char>(players);
+    GameManager<char> game(B, players);
+    game.run();
+    delete B;
+    for (int i = 0; i < 2; ++i) {
+        delete players[i];
+    }
+}
 void fourInaRow()
 {
     int type1, type2;
@@ -123,12 +197,14 @@ int main() {
         std::cout << "Choose one of the following games to start playing or exit the program\n";
         std::cout << "1. Four in a Row\n";
         std::cout << "2. Numerical Tic Tac Toe\n";
-        std::cout << "3. Exit\n";
+        std::cout << "3. 5x5 Tic Tac Toe\n";
+        std::cout << "4. misere Tic Tac Toe\n";
+        std::cout << "5. Exit\n";
         while (true)
         {
             std::cout << "Enter Your choice: ";
             std::getline(std::cin >> std::ws, choiceString);
-            if(choiceString.length() != 1 || choiceString[0] > '3' || choiceString[0] < '1')
+            if(choiceString.length() != 1 || choiceString[0] > '5' || choiceString[0] < '1')
             {
                 std::cout << "Invalid choice\n";
                 continue;
@@ -142,6 +218,12 @@ int main() {
                 break;
             case 2:
                 numericalTicTacToe();
+                break;
+            case 3:
+                _5x5();
+                break;
+            case 4:
+                misere();
                 break;
             default:
                 return 0;
