@@ -49,10 +49,10 @@ void misere(){
     }
     switch(type2) {
         case 1:
-            players[0] = new misere_Player<char>(player1Name, 'X',B);
+            players[1] = new misere_Player<char>(player1Name, 'O',B);
             break;
         case 2:
-            players[0] = new misere_Random_Player<char>('X',B);
+            players[1] = new misere_Random_Player<char>('O',B);
             break;
         default:
             cout << "Invalid choice for Player 1. Exiting the game.\n";
@@ -86,10 +86,10 @@ void _5x5(){
     }
     switch (type2) {
         case 1:
-            players[0] = new _5x5_player<char>(player1Name, 'X');
+            players[1] = new _5x5_player<char>(player1Name, '0');
             break;
         case 2:
-            players[0] = new _5x5_Random<char>('X');
+            players[1] = new _5x5_Random<char>('0');
             break;
         default:
             cout << "Invalid choice for Player 1. Exiting the game.\n";
