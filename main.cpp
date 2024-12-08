@@ -66,6 +66,7 @@ void misere(){
     }
 }
 void _5x5(){
+    bool win = false;
     Player<char>* players[2];
     string player1Name, player2Name;
     int type1, type2;
@@ -75,10 +76,10 @@ void _5x5(){
     getNameAndType(player1Name,player2Name, type1, type2);
     switch (type1) {
         case 1:
-            players[0] = new _5x5_player<char>(player1Name, 'X');
+            players[0] = new _5x5_player<char>(player1Name, 'X',win);
             break;
         case 2:
-            players[0] = new _5x5_Random<char>('X');
+            players[0] = new _5x5_Random<char>('X',win);
             break;
         default:
             cout << "Invalid choice for Player 1. Exiting the game.\n";
@@ -86,16 +87,16 @@ void _5x5(){
     }
     switch (type2) {
         case 1:
-            players[1] = new _5x5_player<char>(player1Name, '0');
+            players[1] = new _5x5_player<char>(player2Name, '0',win);
             break;
         case 2:
-            players[1] = new _5x5_Random<char>('0');
+            players[1] = new _5x5_Random<char>('0',win);
             break;
         default:
             cout << "Invalid choice for Player 1. Exiting the game.\n";
             return;
     }
-    Board<char>* B = new _5x5_board<char>(players);
+    Board<char>* B = new _5x5_board<char>(players,win);
     GameManager<char> game(B, players);
     game.run();
     delete B;
