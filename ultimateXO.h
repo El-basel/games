@@ -15,17 +15,15 @@ public:
     bool is_win() override;
     //checks draw on the status board
     bool is_draw() override;
-    bool update_board(int x, int y, T symbol) override;
+    bool update_board(int, int, T) override;
     //displays the main board
     void display() override;
     bool game_is_over() override;
     void display_status();
-    //checks if there is a win on the given subboard
-    //if a win is found it updates the status board with the player symbol
-    bool check_win(int&, T symbol);
-    //checks if there is a draw on the given subboard
-    //if a draw is found it updates the status board with 'd'
-    bool check_draw(int&, T symbol);
+    //checks if there is a win on the given indices subboard
+    bool check_win(int&,int&,T);
+    //checks if there is a draw on the given indices subboard
+    bool check_draw(int&,int&,T);
 };
 
 template<typename T>
