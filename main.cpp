@@ -4,6 +4,7 @@
 #include "numericalTicTacToe.h"
 #include "5x5X_O.h"
 #include "misere.h"
+#include "pyramidXO.h"
 
 void getNameAndType(std::string& player1, std::string& player2, int& type1 , int& type2)
 {
@@ -186,6 +187,44 @@ void numericalTicTacToe()
     delete players[1];
 }
 
+void pyramidtTicTacToe() {
+    Player<char>* players[2];
+    PyramidBoard<char>* B = new PyramidBoard<char>();
+    string player1Name, player2Name;
+    int type1, type2;
+
+    getNameAndType(player1Name, player2Name, type1, type2);
+    switch (type1) {
+    case 1:
+        players[0] = new Pyramid_X_O_Player<char>(player1Name, 'X');
+        break;
+    case 2:
+        players[0] = new Pyramid_X_O_Random_Player<char>('X', *B);
+        break;
+    default:
+        cout << "Invalid choice for Player 1. Exiting the game.\n";
+        return;
+    }
+    switch (type2) {
+    case 1:
+        players[1] = new Pyramid_X_O_Player<char>(player1Name, 'O');
+        break;
+    case 2:
+        players[1] = new Pyramid_X_O_Random_Player<char>('O', *B);
+        break;
+    default:
+        cout << "Invalid choice for Player 1. Exiting the game.\n";
+        return;
+    }
+
+    GameManager<char> game(B, players);
+    game.run();
+    delete B;
+    for (int i = 0; i < 2; ++i) {
+        delete players[i];
+    }
+}
+
 int main() {
     std::cout << "-------------------------\n";
     std::cout << "| Welcome to Mini Games |\n";
@@ -198,13 +237,14 @@ int main() {
         std::cout << "1. Four in a Row\n";
         std::cout << "2. Numerical Tic Tac Toe\n";
         std::cout << "3. 5x5 Tic Tac Toe\n";
-        std::cout << "4. misere Tic Tac Toe\n";
-        std::cout << "5. Exit\n";
+        std::cout << "4. Misere Tic Tac Toe\n";
+        std::cout << "5. Pyramid Tic Tac Toe\n";
+        std::cout << "6. Exit\n";
         while (true)
         {
             std::cout << "Enter Your choice: ";
             std::getline(std::cin >> std::ws, choiceString);
-            if(choiceString.length() != 1 || choiceString[0] > '5' || choiceString[0] < '1')
+            if(choiceString.length() != 1 || choiceString[0] > '6' || choiceString[0] < '1')
             {
                 std::cout << "Invalid choice\n";
                 continue;
@@ -224,6 +264,9 @@ int main() {
                 break;
             case 4:
                 misere();
+                break;
+            case 5:
+                pyramidtTicTacToe();
                 break;
             default:
                 return 0;

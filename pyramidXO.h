@@ -6,43 +6,49 @@
 #define PYRAMID_X_O_H
 using namespace std;
 
-inline bool inputStreamFailing()
-{
-    if (cin.fail())
-    {
-        cin.clear();
-        cin.ignore(numeric_limits<streamsize>::max(), '\n');
-        return true;
-    }
-    return false;
-}
-
 template <typename T>
 class PyramidBoard : public Board<T> {
 public:
-	PyramidBoard();
-	bool update_board(int x, int y, T symbol) override;
-	bool check_move(int x, int y);
-	void display_board() override;
-	bool is_win() override;
-	bool is_draw() override;
-	bool game_is_over() override;
+    PyramidBoard();
+    bool update_board(int x, int y, T symbol) override;
+    void display_board() override;
+    bool is_win() override;
+    bool is_draw() override;
+    bool game_is_over() override;
+    char** getBoard();
 };
 
 template <typename T>
 class Pyramid_X_O_Player : public Player<T> {
 public:
-	Pyramid_X_O_Player(string name, T symbol);
-	void getmove(int& x, int& y) override;
+    Pyramid_X_O_Player(string name, T symbol);
+    void getmove(int& x, int& y) override;
 };
 
 template <typename T>
 class Pyramid_X_O_Random_Player : public RandomPlayer<T> {
+private:
+    PyramidBoard<T>& board;
 public:
-	Pyramid_X_O_Random_Player(T symbol);
-	void getmove(int& x, int& y) override;
+    Pyramid_X_O_Random_Player(T symbol, PyramidBoard<T>& board);
+    void getmove(int& x, int& y) override;
 };
 
+bool check_move(int x, int y) {
+    if (x == 0 && y == 0) {
+        return true;
+    }
+
+    if (x == 1 && y >= 0 && y <= 2) {
+        return true;
+    }
+
+    if (x == 2 && y >= 0 && y <= 4) {
+        return true;
+    }
+
+    return false;
+}
 
 //============== IMPLEMENTATION ==============//
 
@@ -62,17 +68,11 @@ PyramidBoard<T>::PyramidBoard() {
 }
 
 template <typename T>
-bool PyramidBoard<T>::check_move(int x, int y) {
-    //check if the selected move is available within the pyramid's borders
-    if (!(x == 0 && (y < 0 || y > 0)) || !(x == 1 && (y < 0 || y > 2))) {
-        return true;
+bool PyramidBoard<T>::update_board(int x, int y, T symbol) {
+    if (this->board[x][y] != 0) {
+        cout << "Please select an empty slot" << endl;
     }
 
-    return false;
-}
-
-template <typename T>
-bool PyramidBoard<T>::update_board(int x, int y, T symbol) {
     if (!(x < 0 || x >= this->rows || y < 0 || y > this->columns)
         && (this->board[x][y] == 0 || symbol == 0) && check_move(x, y)) {
         if (symbol == 0) {
@@ -150,6 +150,10 @@ bool PyramidBoard<T>::game_is_over() {
     return is_win() || is_draw();
 }
 
+template <typename T>
+char** PyramidBoard<T>::getBoard() {
+    return this->board;
+}
 
 //=========== Implementation of Pyramid_X_O_Player ===========
 
@@ -158,24 +162,39 @@ Pyramid_X_O_Player<T>::Pyramid_X_O_Player(string name, T symbol) : Player<T>(nam
 
 template <typename T>
 void Pyramid_X_O_Player<T>::getmove(int& x, int& y) {
+    string choicex, choicey;
     do {
-        cout << "Enter your move (row [0-2] and column [0-4]): ";
-        cin >> x >> y;
-        if (inputStreamFailing() || (x == 0 && (y < 0 || y > 0)) || (x == 1 && (y < 0 || y > 2))) {
-            cout << "Invalid input. Try again." << endl;
+        cout << "Please enter your move x and y (0 - 2) separated by spaces: ";
+        cin >> choicex >> choicey;
+        if (choicex[0] < '0' || choicex[0] > '2' || choicey[0] < '0' || choicey[0] > '2' || !check_move(stoi(choicex), stoi(choicey))) {
+            cout << "Please enter valid numbers between 0 and 2." << endl;
         }
-    } while (inputStreamFailing() || (x == 0 && (y < 0 || y > 0)) || (x == 1 && (y < 0 || y > 2)));
+    } while (choicex[0] < '0' || choicex[0] > '2' || choicey[0] < '0' || choicey[0] > '2' || !check_move(stoi(choicex), stoi(choicey)));
+
+    x = choicex[0] - '0';
+    y = choicey[0] - '0';
 }
+
 
 //=========== Implementation of Pyramid_X_O_Random_Player ===========
 
 template <typename T>
-Pyramid_X_O_Random_Player<T>::Pyramid_X_O_Random_Player(T symbol) : RandomPlayer<T>(symbol) {}
+Pyramid_X_O_Random_Player<T>::Pyramid_X_O_Random_Player(T symbol, PyramidBoard<T>& board) : RandomPlayer<T>(symbol), board(board) {}
 
 template <typename T>
 void Pyramid_X_O_Random_Player<T>::getmove(int& x, int& y) {
-        x = rand() % 3;
-        y = rand() % 5;
+    do {
+        x = rand() % 3;  // Row 0 to 2
+        if (x == 0) {
+            y = 0;
+        }
+        else if (x == 1) {
+            y = rand() % 3;
+        }
+        else {
+            y = rand() % 5;
+        }
+    } while (board.getBoard()[x][y] != 0);
 }
 
 #endif
