@@ -272,18 +272,18 @@ void ticTacToe4x4()
 {
     int type1, type2;
     std::string player1Name, player2Name;
-    Player<int>* players[2];
-    Board<int>* board = new Board3x3();
-    std::cout << "------------------------------------\n";
+    Player<char>* players[2];
+    Board<char>* board = new Board4x4();
+    std::cout << "------------------------------\n";
     std::cout << "| Welcome to 4x4 Tic Tac Toe |\n";
-    std::cout << "------------------------------------\n";
+    std::cout << "------------------------------\n";
     getNameAndType(player1Name, player2Name, type1, type2);
     switch(type1) {
         case 1:
-            players[0] = new Numerical_Tic_Tac_Toe_Player(player1Name, 2);
+            players[0] = new Player4x4(player1Name, 'X');
             break;
         case 2:
-            players[0] = new Numerical_Tic_Tac_Toe_Random_Player(2);
+            players[0] = new Random_Player4x4('X');
             break;
         default:
             cout << "Invalid choice for Player 1. Exiting the game.\n";
@@ -292,17 +292,19 @@ void ticTacToe4x4()
 
     switch(type2) {
         case 1:
-            players[1] = new Numerical_Tic_Tac_Toe_Player(player2Name, 1);
+            players[1] = new Player4x4(player2Name, 'O');
             break;
         case 2:
-            players[1] = new Numerical_Tic_Tac_Toe_Random_Player(1);
+            players[1] = new Random_Player4x4('O');
             break;
         default:
             cout << "Invalid choice for Player 2. Exiting the game.\n";
             return;
     }
-    GameManager<int> numerical_tic_tac_toe(board, players);
-    numerical_tic_tac_toe.run();
+    players[0]->setBoard(board);
+    players[1]->setBoard(board);
+    GameManager<char> ticTacToe4x4Game(board, players);
+    ticTacToe4x4Game.run();
 
     delete board;
     delete players[0];
@@ -330,7 +332,7 @@ int main() {
         {
             std::cout << "Enter Your choice: ";
             std::getline(std::cin >> std::ws, choiceString);
-            if(choiceString.length() != 1 || choiceString[0] > '7' || choiceString[0] < '1')
+            if(choiceString.length() != 1 || choiceString[0] > '8' || choiceString[0] < '1')
             {
                 std::cout << "Invalid choice\n";
                 continue;
@@ -358,7 +360,10 @@ int main() {
                 WordTicTacToe();
                 break;
             case 7:
+                ticTacToe4x4();
                 break;
+            case 8:
+                return 0;
             default:
                 return 0;
         }

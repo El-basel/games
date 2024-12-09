@@ -31,7 +31,7 @@ Board4x4::Board4x4() {
 }
 
 void Board4x4::display_board() {
-    std::cout << std::string(32,'-') << std::endl;
+    std::cout << std::string(38,'-') << std::endl;
     for (int i = 0; i < this->rows; ++i) {
         std::cout << "| ";
         for (int j = 0; j < this->columns; ++j) {
@@ -39,7 +39,7 @@ void Board4x4::display_board() {
             std::cout << std::setw(2) << (this->board[i][j] ? this->board[i][j]: ' ') << " |";
         }
         std::cout << std::endl;
-        std::cout << std::string(32,'-') << std::endl;
+        std::cout << std::string(38,'-') << std::endl;
     }
 }
 
@@ -63,20 +63,26 @@ bool Board4x4::update_board(int x, int y, char symbol) {
 
 bool Board4x4::is_win() {
     for (int i = 0; i < this->rows; ++i) {
-        if(this->board[i][0] ==  this->board[i][1] && this->board[i][1] == this->board[i][2])
-        {
-            return true;
+        for (int j = 0; j < 2; ++j) {
+            if(this->board[i][j] ==  this->board[i][j+1] &&
+            this->board[i][j+1] == this->board[i][j+2] && this->board[i][j])
+            {
+                return true;
+            }
         }
     }
     for (int j = 0; j < this->columns; ++j) {
-        if(this->board[0][j] &&  this->board[1][j] && this->board[1][j] == this->board[2][j] )
-        {
-            return true;
+        for (int i = 0; i < 2; ++i) {
+            if(this->board[i][j] &&  this->board[i+1][j] &&
+            this->board[i+1][j] == this->board[i+2][j] && this->board[i][j])
+            {
+                return true;
+            }
         }
     }
     for (int i = 0; i < 2; ++i) {
         for (int j = 0; j < 2; ++j) {
-            if(this->board[i][j] == this->board[i+1][j+1] && this->board[i+1][j+1] == this->board[i+2][j+2])
+            if(this->board[i][j] == this->board[i+1][j+1] && this->board[i+1][j+1] == this->board[i+2][j+2] && this->board[i][j])
             {
                 return true;
             }
@@ -85,7 +91,7 @@ bool Board4x4::is_win() {
 
     for (int i = 0; i < 2; ++i) {
         for (int j = this->columns-1; j > 1; --j) {
-            if(this->board[i][j] == this->board[i+1][j-1] && this->board[i+1][j-1] == this->board[i+2][j-2])
+            if(this->board[i][j] == this->board[i+1][j-1] && this->board[i+1][j-1] == this->board[i+2][j-2] && this->board[i][j])
             {
                 return true;
             }
@@ -107,7 +113,7 @@ bool Board4x4::is_valid_cell(int newX, int newY, int oldX, int oldY, char symbol
     {
         return false;
     }
-    if(board[newX][newY] != symbol)
+    if(board[oldX][oldY] != symbol)
     {
         return false;
     }
@@ -140,6 +146,7 @@ void Player4x4::getmove(int &x, int &y) {
     int oldX, oldY;
     Board4x4* board4X4 = dynamic_cast<Board4x4*>(boardPtr);
     do {
+        std::cout << "Your are playing as " << symbol << '\n';
         std::cout << "Enter the Token Position as x (0 to 3) and y (0 to 3) separated by spaces: ";
         std::cin >> oldX >> oldY;
         std::cout << "Enter the New Position as x (0 to 3) and y (0 to 3) separated by spaces: ";
@@ -153,7 +160,22 @@ void Player4x4::getmove(int &x, int &y) {
 // End Player4x4 class
 // Random_Player4x4 class implementation
 
-Random_Player4x4::Random_Player4x4(char symbol) : RandomPlayer(symbol){}
+Random_Player4x4::Random_Player4x4(char symbol) : RandomPlayer(symbol){
+    if(symbol == 'X')
+    {
+        recentMoves[0] = {0,1};
+        recentMoves[1] = {0,3};
+        recentMoves[2] = {3,1};
+        recentMoves[3] = {3,3};
+    }
+    else
+    {
+        recentMoves[0] = {0,0};
+        recentMoves[1] = {0,2};
+        recentMoves[2] = {3,0};
+        recentMoves[3] = {3,2};
+    }
+}
 
 void Random_Player4x4::getmove(int &x, int &y) {
     int oldX, oldY;
@@ -161,13 +183,19 @@ void Random_Player4x4::getmove(int &x, int &y) {
     do {
         std::srand(std::time(nullptr));
         oldX = std::rand() % 4;
-        oldY = std::rand() % 4;
+        oldY = oldX;
+        oldX = recentMoves[oldX].first;
+        oldY = recentMoves[oldY].second;
         x = std::rand() % 4;
+        if(x == 0)
+            continue;
+        x = oldX + (2 - x);
         y = std::rand() % 4;
-
-
+        y = oldY + (2 - y);
     } while(!(board4X4->is_valid_cell(x, y, oldX, oldY, symbol)));
     board4X4->setOldX(oldX);
     board4X4->setOldY(oldY);
+    recentMoves[oldX].first = oldX;
+    recentMoves[oldX].second = oldY ;
 }
 // End Random_Player4x4 class

@@ -1,4 +1,5 @@
 #include "BoardGame_Classes.h"
+#include <map>
 #ifndef GAMES_4X4TIC_TAC_TOE_H
 #define GAMES_4X4TIC_TAC_TOE_H
 
@@ -25,6 +26,8 @@ public:
 };
 
 class Random_Player4x4 : public RandomPlayer<char>{
+private:
+    std::map<int,std::pair<int,int>> recentMoves;
 public:
     Random_Player4x4(char symbol);
     void getmove(int& x, int& y) override;
