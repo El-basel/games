@@ -5,6 +5,7 @@
 #include "5x5X_O.h"
 #include "misere.h"
 #include "pyramidXO.h"
+#include "wordXO.h"
 
 void getNameAndType(std::string& player1, std::string& player2, int& type1 , int& type2)
 {
@@ -226,6 +227,46 @@ void pyramidtTicTacToe() {
     }
 }
 
+void WordTicTacToe() {
+    Player<char>* players[2];
+    Word_Board<char>* B = new Word_Board<char>();
+    string player1Name, player2Name;
+    int type1, type2;
+
+    getNameAndType(player1Name, player2Name, type1, type2);
+
+    switch (type1) {
+    case 1:
+        players[0] = new Word_Tic_Tac_Toe_Player<char>(player1Name, 'X');
+        break;
+    case 2:
+        players[0] = new Word_Tic_Tac_Toe_Random_Player<char>('X', *B);
+        break;
+    default:
+        cout << "Invalid choice for Player 1. Exiting the game.\n";
+        return;
+    }
+
+    switch (type2) {
+    case 1:
+        players[1] = new Word_Tic_Tac_Toe_Player<char>(player2Name, 'O');
+        break;
+    case 2:
+        players[1] = new Word_Tic_Tac_Toe_Random_Player<char>('O', *B);
+        break;
+    default:
+        cout << "Invalid choice for Player 2. Exiting the game.\n";
+        return;
+    }
+
+    GameManager<char> game(B, players);
+    game.run();
+    delete B;
+    for (int i = 0; i < 2; ++i) {
+        delete players[i];
+    }
+}
+
 int main() {
     std::cout << "-------------------------\n";
     std::cout << "| Welcome to Mini Games |\n";
@@ -240,12 +281,13 @@ int main() {
         std::cout << "3. 5x5 Tic Tac Toe\n";
         std::cout << "4. Misere Tic Tac Toe\n";
         std::cout << "5. Pyramid Tic Tac Toe\n";
-        std::cout << "6. Exit\n";
+        std::cout << "6. Word Tic Tac Toe\n"
+        std::cout << "7. Exit\n";
         while (true)
         {
             std::cout << "Enter Your choice: ";
             std::getline(std::cin >> std::ws, choiceString);
-            if(choiceString.length() != 1 || choiceString[0] > '6' || choiceString[0] < '1')
+            if(choiceString.length() != 1 || choiceString[0] > '7' || choiceString[0] < '1')
             {
                 std::cout << "Invalid choice\n";
                 continue;
@@ -268,6 +310,9 @@ int main() {
                 break;
             case 5:
                 pyramidtTicTacToe();
+                break;
+            case 6:
+                WordTicTacToe();
                 break;
             default:
                 return 0;

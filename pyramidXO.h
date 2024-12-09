@@ -164,7 +164,7 @@ template <typename T>
 void Pyramid_X_O_Player<T>::getmove(int& x, int& y) {
     string choicex, choicey;
     do {
-        cout << "Please enter your move x and y (0 - 2) separated by spaces: ";
+        cout << "Player '" << Player<T>::getname() << "' enter move (x y) between 0 and 2 separated by spaces: ";
         cin >> choicex >> choicey;
         if (choicex[0] < '0' || choicex[0] > '2' || choicey[0] < '0' || choicey[0] > '2' || !check_move(stoi(choicex), stoi(choicey))) {
             cout << "Please enter valid numbers between 0 and 2." << endl;
@@ -184,7 +184,7 @@ Pyramid_X_O_Random_Player<T>::Pyramid_X_O_Random_Player(T symbol, PyramidBoard<T
 template <typename T>
 void Pyramid_X_O_Random_Player<T>::getmove(int& x, int& y) {
     do {
-        x = rand() % 3;  // Row 0 to 2
+        x = rand() % 3;
         if (x == 0) {
             y = 0;
         }
