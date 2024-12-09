@@ -6,6 +6,7 @@
 #include "misere.h"
 #include "pyramidXO.h"
 #include "wordXO.h"
+#include "4x4TicTacToe.h"
 
 void getNameAndType(std::string& player1, std::string& player2, int& type1 , int& type2)
 {
@@ -267,6 +268,47 @@ void WordTicTacToe() {
     }
 }
 
+void ticTacToe4x4()
+{
+    int type1, type2;
+    std::string player1Name, player2Name;
+    Player<int>* players[2];
+    Board<int>* board = new Board3x3();
+    std::cout << "------------------------------------\n";
+    std::cout << "| Welcome to 4x4 Tic Tac Toe |\n";
+    std::cout << "------------------------------------\n";
+    getNameAndType(player1Name, player2Name, type1, type2);
+    switch(type1) {
+        case 1:
+            players[0] = new Numerical_Tic_Tac_Toe_Player(player1Name, 2);
+            break;
+        case 2:
+            players[0] = new Numerical_Tic_Tac_Toe_Random_Player(2);
+            break;
+        default:
+            cout << "Invalid choice for Player 1. Exiting the game.\n";
+            return;
+    }
+
+    switch(type2) {
+        case 1:
+            players[1] = new Numerical_Tic_Tac_Toe_Player(player2Name, 1);
+            break;
+        case 2:
+            players[1] = new Numerical_Tic_Tac_Toe_Random_Player(1);
+            break;
+        default:
+            cout << "Invalid choice for Player 2. Exiting the game.\n";
+            return;
+    }
+    GameManager<int> numerical_tic_tac_toe(board, players);
+    numerical_tic_tac_toe.run();
+
+    delete board;
+    delete players[0];
+    delete players[1];
+}
+
 int main() {
     std::cout << "-------------------------\n";
     std::cout << "| Welcome to Mini Games |\n";
@@ -281,8 +323,9 @@ int main() {
         std::cout << "3. 5x5 Tic Tac Toe\n";
         std::cout << "4. Misere Tic Tac Toe\n";
         std::cout << "5. Pyramid Tic Tac Toe\n";
-        std::cout << "6. Word Tic Tac Toe\n"
-        std::cout << "7. Exit\n";
+        std::cout << "6. Word Tic Tac Toe\n";
+        std::cout << "7. 4x4 Tic Tac Toe\n";
+        std::cout << "8. Exit\n";
         while (true)
         {
             std::cout << "Enter Your choice: ";
@@ -313,6 +356,8 @@ int main() {
                 break;
             case 6:
                 WordTicTacToe();
+                break;
+            case 7:
                 break;
             default:
                 return 0;
