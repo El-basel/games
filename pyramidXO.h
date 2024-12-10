@@ -70,7 +70,7 @@ PyramidBoard<T>::PyramidBoard() {
 template <typename T>
 bool PyramidBoard<T>::update_board(int x, int y, T symbol) {
     if (this->board[x][y] != 0) {
-        cout << "Please select an empty slot" << endl;
+        cout << "Please select a valid empty slot" << endl;
     }
 
     if (!(x < 0 || x >= this->rows || y < 0 || y > this->columns)
@@ -95,25 +95,27 @@ void PyramidBoard<T>::display_board() {
     for (int i = 0; i < this->rows; i++) {
 
         if (i == 0) {
-            cout << setw(18) << "|(" << i << ',' << 0 << ')';
-            cout << setw(2) << this->board[i][0] << " |";;
+            cout << setw(18) << ' ' << '|';
+            cout << "(" << i << ',' << 0 << ')';
+            cout << setw(2) << right << (this->board[i][0] != 0 ? this->board[i][0] : ' ') << " |";
             cout << endl;
         }
+
         else if (i == 1) {
-            cout << setw(9);
-            cout << '|';
+            cout << setw(9) << ' ' << '|';
 
             for (int j = 0; j < 3; j++) {
                 cout << "(" << i << ',' << j << ')';
-                cout << setw(2) << this->board[i][j] << " |";
+                cout << setw(2) << right << (this->board[i][j] != 0 ? this->board[i][j] : ' ') << " |";
             }
             cout << endl;
         }
+
         else {
             cout << '|';
             for (int j = 0; j < 5; j++) {
                 cout << "(" << i << ',' << j << ')';
-                cout << setw(2) << this->board[i][j] << " |";
+                cout << setw(2) << right << (this->board[i][j] != 0 ? this->board[i][j] : ' ') << " |";
             }
             cout << endl;
         }
@@ -155,6 +157,7 @@ char** PyramidBoard<T>::getBoard() {
     return this->board;
 }
 
+
 //=========== Implementation of Pyramid_X_O_Player ===========
 
 template <typename T>
@@ -163,16 +166,26 @@ Pyramid_X_O_Player<T>::Pyramid_X_O_Player(string name, T symbol) : Player<T>(nam
 template <typename T>
 void Pyramid_X_O_Player<T>::getmove(int& x, int& y) {
     string choicex, choicey;
-    do {
-        cout << "Player '" << Player<T>::getname() << "' enter move (x y) between 0 and 2 separated by spaces: ";
-        cin >> choicex >> choicey;
-        if (choicex[0] < '0' || choicex[0] > '2' || choicey[0] < '0' || choicey[0] > '2' || !check_move(stoi(choicex), stoi(choicey))) {
-            cout << "Please enter valid numbers between 0 and 2." << endl;
-        }
-    } while (choicex[0] < '0' || choicex[0] > '2' || choicey[0] < '0' || choicey[0] > '2' || !check_move(stoi(choicex), stoi(choicey)));
 
-    x = choicex[0] - '0';
-    y = choicey[0] - '0';
+    do {
+        cout << "Player '" << Player<T>::getname() << "' enter move (x y) between (0-2, 0-4) separated by spaces: ";
+        cin >> choicex >> choicey;
+
+        if (choicex.length() == 1 && choicey.length() == 1 && isdigit(choicex[0]) && isdigit(choicey[0])) {
+            x = choicex[0] - '0';
+            y = choicey[0] - '0';
+
+            if (check_move(x, y)) {
+                break;
+            }
+            else {
+                cout << "Invalid move. Please try again." << endl;
+            }
+        }
+        else {
+            cout << "Invalid input format. Please enter two digits separated by a space." << endl;
+        }
+    } while (true);
 }
 
 

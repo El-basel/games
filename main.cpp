@@ -195,8 +195,12 @@ void pyramidtTicTacToe() {
     PyramidBoard<char>* B = new PyramidBoard<char>();
     string player1Name, player2Name;
     int type1, type2;
+    std::cout << "-------------------------------------\n";
+    std::cout << "|  Welcome to Pyramid Tic Tac Toe   |\n";
+    std::cout << "-------------------------------------\n";
 
     getNameAndType(player1Name, player2Name, type1, type2);
+
     switch (type1) {
     case 1:
         players[0] = new Pyramid_X_O_Player<char>(player1Name, 'X');
@@ -210,7 +214,7 @@ void pyramidtTicTacToe() {
     }
     switch (type2) {
     case 1:
-        players[1] = new Pyramid_X_O_Player<char>(player1Name, 'O');
+        players[1] = new Pyramid_X_O_Player<char>(player2Name, 'O');
         break;
     case 2:
         players[1] = new Pyramid_X_O_Random_Player<char>('O', *B);
@@ -222,6 +226,7 @@ void pyramidtTicTacToe() {
 
     GameManager<char> game(B, players);
     game.run();
+
     delete B;
     for (int i = 0; i < 2; ++i) {
         delete players[i];
@@ -234,6 +239,9 @@ void WordTicTacToe() {
     string player1Name, player2Name;
     int type1, type2;
 
+    std::cout << "------------------------------------\n";
+    std::cout << "|    Welcome to Word Tic TacToe    |\n";
+    std::cout << "------------------------------------\n";
     getNameAndType(player1Name, player2Name, type1, type2);
 
     switch (type1) {
