@@ -106,7 +106,7 @@ void Word_Board<T>::display_board() {
 		cout << "\n| ";
 		for (int j = 0; j < this->columns; j++) {
 			cout << "(" << i << "," << j << ")";
-			cout << setw(2) << this->board[i][j] << " |";
+			cout << setw(2) << right << (this->board[i][j] != 0 ? this->board[i][j] : ' ') << " |";
 		}
 		cout << "\n-----------------------------";
 	}
