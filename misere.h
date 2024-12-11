@@ -58,7 +58,7 @@ misere_board<T>::misere_board() {
         }
     }
     this->n_moves = 0;
-    this->win = 0;
+    this->win = false;
 }
 
 template <typename T>
