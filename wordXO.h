@@ -42,16 +42,14 @@ public:
 
 bool is_valid(string text, string player) {
 	if (text.length() != 1) {
-		cout << endl;
-		cout << "Player '" << player << "' Please enter a single character from 'A' to 'Z': ";
+		cout << "\nPlayer '" << player << "' Please enter a single character from 'A' to 'Z': ";
 		return false;
 	}
 	string upper_text;
 	upper_text = toupper(text[0]);
 
 	if (upper_text[0] < 'A' || upper_text[0] > 'Z') {
-		cout << endl;
-		cout << "Please enter a character from 'a' to 'z': ";
+		cout << "\nPlease enter a character from 'a' to 'z': ";
 		return false;
 	}
 

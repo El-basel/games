@@ -22,9 +22,9 @@ public:
     void display_status();
     int board_finder(int&,int&);
     //checks if there is a win on the given indices subboard
-    bool check_win(int&,int&,T);
+    bool check_win(int&,int&);
     //checks if there is a draw on the given indices subboard
-    bool check_draw(int&,int&,T);
+    bool check_draw(int&,int&);
 };
 
 template<typename T>
@@ -125,13 +125,72 @@ int ultimate_board<T>::board_finder(int& x, int& y) {
     return (xb*3+yb+1);
 }
 
+template<typename T>
+bool ultimate_board<T>::is_win() {
+    // Check rows and columns of status board
+    for (int i = 0; i < 3; i++) {
+        if ((this->status[i][0] == this->status[i][1] && this->status[i][1] == this->status[i][2] && this->status[i][0] != 0) ||
+            (this->status[0][i] == this->status[1][i] && this->status[1][i] == this->status[2][i] && this->status[0][i] != 0)) {
+            return true;
+        }
+    }
 
+    // Check diagonals of status board
+    if ((this->status[0][0] == this->status[1][1] && this->status[1][1] == this->status[2][2] && this->status[0][0] != 0) ||
+        (this->status[0][2] == this->status[1][1] && this->status[1][1] == this->status[2][0] && this->status[0][2] != 0)) {
+        return true;
+    }
 
+    return false;
+}
 
+template<typename T>
+bool ultimate_board<T>::is_draw() {
+    //if all moves in the main board is played
+    //and theres no win in the status board
+    //game is a draw
+    return (this->n_moves == 81 && !is_win());
+}
 
+template<typename T>
+bool ultimate_board<T>::game_is_over() {
+    return (is_win() || is_draw());
+}
 
+template<typename T>
+bool ultimate_board<T>::check_win(int& x, int& y) {
+    //check rows and colums of the given subboard index for a win
+    for (int i = 0; i < 3; i++) {
+        if ((this->board[x + i][y] == this->board[x + i][y + 1] && this->board[x + i][y + 1] == this->board[x + i][y + 2] && this->board[x + i][y] != 0) ||
+            (this->board[x][y + i] == this->board[x + 1][y + i] && this->board[x + 1][y + i] == this->board[x + 2][y + i] && this->board[x][y + i] != 0)) {
 
+            return true;
+        }
+    }
 
+    //check diagonals of the given subboard index for a win
+    if ((this->board[x][y] == this->board[x + 1][y + 1] && this->board[x + 1][y + 1] == this->board[x + 2][y + 2] && this->board[x][y] != 0) ||
+        (this->board[x][y + 2] == this->board[x + 1][y + 1] && this->board[x + 1][y + 1] == this->board[x + 2][y] && this->board[x][y + 2] != 0)) {
+
+        return true;
+    }
+
+    return false;
+}
+
+template<typename T>
+bool ultimate_board<T>::check_draw(int& x, int& y) {
+    //loop through each sub board slot and check if theyre all filled or not
+    for (int i = 0; i < 3; i++) {
+        for (int j = 0; j < 3; j++) {
+            if (this->board[x + i][y + j] == 0) {
+                return false
+            }
+        }
+    }
+    
+    return true;
+}
 
 
 #endif //GAMES_ULTIMATEXO_H
