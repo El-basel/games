@@ -17,7 +17,7 @@ public:
     bool is_draw() override;
     bool update_board(int, int, T) override;
     //displays the main board
-    void display() override;
+    void display_board() override;
     bool game_is_over() override;
     void display_status();
     int board_finder(int&,int&);
@@ -30,18 +30,16 @@ public:
 template<typename T>
 class ultimate_Player: public Player<T>{
 public:
-    ultimate_Player(string,T);
+    ultimate_Player(const string&,T);
     void getmove(int&,int&) override;
     //checks if the given string is a valid postive number
-    bool isvalid(const string&);
 };
 
 template<typename T>
 class ultimate_Random: public RandomPlayer<T>{
 public:
-    ultimate_Random();
+    ultimate_Random(T symbol);
     void getmove(int&,int&) override;
-    bool isvalid(const string&);
 };
 
 
@@ -49,7 +47,7 @@ public:
 #include <string>
 template<typename T>
 ultimate_board<T>::ultimate_board() {
-    this->rows = this->columns = 81;
+    this->rows = this->columns = 9;
     this->board = new char*[this->rows];
     for (int i = 0; i < this->rows; i++) {
         this->board[i] = new char[this->columns];
@@ -59,7 +57,7 @@ ultimate_board<T>::ultimate_board() {
     }
     this->status = new char*[3];
     for (int i = 0; i < 3; i++) {
-        this->board[i] = new char[3];
+        this->status[i] = new char[3];
         for (int j = 0; j < 3; j++) {
             this->status[i][j] = 0;
         }
@@ -81,24 +79,25 @@ bool ultimate_board<T>::update_board(int x, int y, T symbol) {
             status[x/3][y/3] = 'd';
             played.insert(b);
         }
+        display_status();
     }
     else return false;
     return true;
 }
 
 template<typename T>
-void ultimate_board<T>::display() {
+void ultimate_board<T>::display_board() {
     cout << "  || ";
     for(int i = 0;i < 9;++i){
-        cout << i << " | ";
-        if((i+1)%3 == 0) cout << "   " << "| ";
+        cout << i+1 << " | ";
+        if((i+1)%3 == 0 && i != 8) cout << "   " << "| ";
     }
-    cout << '\n' << string(65,'-');
+    cout << '\n' << string(65,'-') << '\n';
     for(int i = 0; i < this->rows;++i){
         cout << i + 1 << " || ";
         for(int j = 0; j < this->columns;++j){
             cout << (this->board[i][j] == 0 ? ' ' : this->board[i][j]) << " | ";
-            if((j+1)%3 == 0)cout << "   " << "| ";
+            if((j+1)%3 == 0 && j != 8)cout << "   " << "| ";
         }
         cout << '\n';
         if((i+1)%3 == 0) cout << string(65,'-') << '\n';
@@ -184,12 +183,48 @@ bool ultimate_board<T>::check_draw(int& x, int& y) {
     for (int i = 0; i < 3; i++) {
         for (int j = 0; j < 3; j++) {
             if (this->board[x + i][y + j] == 0) {
-                return false
+                return false;
             }
         }
     }
     
     return true;
+}
+//---------------------------------------------
+template<typename T>
+ultimate_Player<T>::ultimate_Player(const string& name , T symbol) : Player<T>(name,symbol){}
+
+template<typename T>
+void ultimate_Player<T>::getmove(int& x, int& y) {
+    string choice;
+    cout << "please enter the row of your choice(1-5): ";
+    getline(cin >> ws, choice);
+    while (choice.size() != 1 && isdigit(choice[0])) {
+        cout << "please enter a number that is between(1-5): ";
+        getline(cin >> ws, choice);
+    }
+    x = stoi(choice);
+    cout << "please enter the column of your choice(1-5): ";
+    getline(cin >> ws, choice);
+    while (choice.size() != 1 && isdigit(choice[0])) {
+        cout << "please enter a number that is between(1-5): ";
+        getline(cin >> ws, choice);
+    }
+    y = stoi(choice);
+    --x;--y;
+}
+//---------------------------------------------
+template<typename T>
+ultimate_Random<T>::ultimate_Random(T symbol) : RandomPlayer<T>(symbol) {
+    this->dimension = 3;
+    this->name = "Random Computer Player";
+    srand(static_cast<unsigned int>(time(NULL)));  // Seed the random number generator
+}
+
+template<typename T>
+void ultimate_Random<T>::getmove(int &x, int &y) {
+    x = rand() % this->dimension;
+    y = rand() % this->dimension;
 }
 
 

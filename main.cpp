@@ -7,6 +7,7 @@
 #include "pyramidXO.h"
 #include "wordXO.h"
 #include "4x4TicTacToe.h"
+#include "ultimateXO.h"
 
 void getNameAndType(std::string& player1, std::string& player2, int& type1 , int& type2)
 {
@@ -33,6 +34,41 @@ void getNameAndType(std::string& player1, std::string& player2, int& type1 , int
     } while(type2String.length() > 1 || type2String[0] > '2' || type2String[0] < '1');
     type2 = type2String[0] - '0';
 }
+void ultimateXO(){
+    Player<char>* players[2];
+    Board<char>* B = new ultimate_board<char>();
+    string player1Name, player2Name;
+    int type1,type2;
+    getNameAndType(player1Name,player2Name, type1, type2);
+    switch(type1) {
+        case 1:
+            players[0] = new ultimate_Player<char>(player1Name, 'X');
+            break;
+        case 2:
+            players[0] = new ultimate_Random<char>('X');
+            break;
+        default:
+            cout << "Invalid choice for Player 1. Exiting the game.\n";
+            return;
+    }
+    switch(type2) {
+        case 1:
+            players[0] = new ultimate_Player<char>(player2Name, 'O');
+            break;
+        case 2:
+            players[0] = new ultimate_Random<char>('O');
+            break;
+        default:
+            cout << "Invalid choice for Player 2. Exiting the game.\n";
+            return;
+    }
+    GameManager<char> x_o_game(B, players);
+    x_o_game.run();
+    delete B;
+    for (auto & player : players) {
+        delete player;
+    }
+}
 void misere(){
     Player<char>* players[2];
     Board<char>* B = new misere_board<char>();
@@ -58,7 +94,7 @@ void misere(){
             players[1] = new misere_Random_Player<char>('O',B);
             break;
         default:
-            cout << "Invalid choice for Player 1. Exiting the game.\n";
+            cout << "Invalid choice for Player 2. Exiting the game.\n";
             return;
     }
     GameManager<char> x_o_game(B, players);
@@ -96,7 +132,7 @@ void _5x5(){
             players[1] = new _5x5_Random<char>('0',win);
             break;
         default:
-            cout << "Invalid choice for Player 1. Exiting the game.\n";
+            cout << "Invalid choice for Player 2. Exiting the game.\n";
             return;
     }
     Board<char>* B = new _5x5_board<char>(players,win);
@@ -335,12 +371,13 @@ int main() {
         std::cout << "5. Pyramid Tic Tac Toe\n";
         std::cout << "6. Word Tic Tac Toe\n";
         std::cout << "7. 4x4 Tic Tac Toe\n";
-        std::cout << "8. Exit\n";
+        std::cout << "8. Ultimate Tic Tac Toe\n";
+        std::cout << "9. Exit\n";
         while (true)
         {
             std::cout << "Enter Your choice: ";
             std::getline(std::cin >> std::ws, choiceString);
-            if(choiceString.length() != 1 || choiceString[0] > '8' || choiceString[0] < '1')
+            if(choiceString.length() != 1 || choiceString[0] > '9' || choiceString[0] < '1')
             {
                 std::cout << "Invalid choice\n";
                 continue;
@@ -371,6 +408,9 @@ int main() {
                 ticTacToe4x4();
                 break;
             case 8:
+                ultimateXO();
+                return 0;
+            case 9:
                 return 0;
             default:
                 return 0;
