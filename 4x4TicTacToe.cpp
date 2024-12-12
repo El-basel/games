@@ -2,7 +2,6 @@
 #include <iomanip>
 #include <iostream>
 #include <limits>
-
 inline bool inputStreamFailing()
 {
     if(std::cin.fail())
@@ -16,6 +15,7 @@ inline bool inputStreamFailing()
 
 // Board4x4 class implementation
 Board4x4::Board4x4() {
+    std::srand(543);
     this->rows = 4;
     this->columns = 4;
     this->board = new char* [this->rows];
@@ -73,7 +73,7 @@ bool Board4x4::is_win() {
     }
     for (int j = 0; j < this->columns; ++j) {
         for (int i = 0; i < 2; ++i) {
-            if(this->board[i][j] &&  this->board[i+1][j] &&
+            if(this->board[i][j] ==  this->board[i+1][j] &&
             this->board[i+1][j] == this->board[i+2][j] && this->board[i][j])
             {
                 return true;
@@ -102,6 +102,10 @@ bool Board4x4::is_win() {
 
 bool Board4x4::is_valid_cell(int newX, int newY, int oldX, int oldY, char symbol)
 {
+    if(newX > 3 || newY > 3 || newX < 0 || newY < 0)
+    {
+        return false;
+    }
     if(newX == oldX - 1 || newX == oldX + 1)
     {
         if(newY == oldY + 1 || newY == oldY - 1)
@@ -165,37 +169,34 @@ Random_Player4x4::Random_Player4x4(char symbol) : RandomPlayer(symbol){
     {
         recentMoves[0] = {0,1};
         recentMoves[1] = {0,3};
-        recentMoves[2] = {3,1};
-        recentMoves[3] = {3,3};
+        recentMoves[2] = {3,0};
+        recentMoves[3] = {3,2};
     }
     else
     {
         recentMoves[0] = {0,0};
         recentMoves[1] = {0,2};
-        recentMoves[2] = {3,0};
-        recentMoves[3] = {3,2};
+        recentMoves[2] = {3,1};
+        recentMoves[3] = {3,3};
     }
 }
 
 void Random_Player4x4::getmove(int &x, int &y) {
-    int oldX, oldY;
+    int oldX, oldY,index;
+    int moves[3] = {-1,0,1};
     Board4x4* board4X4 = dynamic_cast<Board4x4*>(boardPtr);
     do {
-        std::srand(std::time(nullptr));
-        oldX = std::rand() % 4;
-        oldY = oldX;
-        oldX = recentMoves[oldX].first;
-        oldY = recentMoves[oldY].second;
-        x = std::rand() % 4;
-        if(x == 0)
-            continue;
-        x = oldX + (2 - x);
-        y = std::rand() % 4;
-        y = oldY + (2 - y);
+        index = std::rand() % 4;
+        oldX = this->recentMoves[index].first;
+        oldY = this->recentMoves[index].second;
+        x = std::rand() % 3;
+        x = oldX + moves[x];
+        y = std::rand() % 3;
+        y = oldY + moves[y];
     } while(!(board4X4->is_valid_cell(x, y, oldX, oldY, symbol)));
     board4X4->setOldX(oldX);
     board4X4->setOldY(oldY);
-    recentMoves[oldX].first = oldX;
-    recentMoves[oldX].second = oldY ;
+    this->recentMoves[index].first = x;
+    this->recentMoves[index].second = y ;
 }
 // End Random_Player4x4 class
