@@ -16,6 +16,7 @@ public:
     bool is_draw() override;
     bool game_is_over() override;
     char** getBoard();
+    bool check_move(int x, int y);
 };
 
 template <typename T>
@@ -34,21 +35,6 @@ public:
     void getmove(int& x, int& y) override;
 };
 
-bool check_move(int x, int y) {
-    if (x == 0 && y == 0) {
-        return true;
-    }
-
-    if (x == 1 && y >= 0 && y <= 2) {
-        return true;
-    }
-
-    if (x == 2 && y >= 0 && y <= 4) {
-        return true;
-    }
-
-    return false;
-}
 
 //============== IMPLEMENTATION ==============//
 
@@ -157,6 +143,14 @@ char** PyramidBoard<T>::getBoard() {
     return this->board;
 }
 
+template <typename T>
+bool PyramidBoard<T>::check_move(int x, int y) {
+    if ((x == 0 && y == 0) || (x == 1 && y >= 0 && y <= 2) || (x == 2 && y >= 0 && y <= 4)) {
+        return true;
+    }
+
+    return false;
+}
 
 //=========== Implementation of Pyramid_X_O_Player ===========
 
@@ -175,7 +169,7 @@ void Pyramid_X_O_Player<T>::getmove(int& x, int& y) {
             x = choicex[0] - '0';
             y = choicey[0] - '0';
 
-            if (check_move(x, y)) {
+            if ((x == 0 && y == 0) || (x == 1 && y >= 0 && y <= 2) || (x == 2 && y >= 0 && y <= 4)) {
                 break;
             }
             else {
