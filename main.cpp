@@ -413,7 +413,7 @@ int main() {
                 break;
             case 8:
                 ultimateXO();
-                return 0;
+                break;
             case 9:
                 return 0;
             default:

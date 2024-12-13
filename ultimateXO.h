@@ -206,17 +206,17 @@ ultimate_Player<T>::ultimate_Player(const string& name , T symbol) : Player<T>(n
 template<typename T>
 void ultimate_Player<T>::getmove(int& x, int& y) {
     string choice;
-    cout << "please enter the row of your choice(1-5): ";
+    cout << "please enter the row of your choice(1-9): ";
     getline(cin >> ws, choice);
     while (choice.size() != 1 && isdigit(choice[0])) {
-        cout << "please enter a number that is between(1-5): ";
+        cout << "please enter a number that is between(1-9): ";
         getline(cin >> ws, choice);
     }
     x = stoi(choice);
-    cout << "please enter the column of your choice(1-5): ";
+    cout << "please enter the column of your choice(1-9): ";
     getline(cin >> ws, choice);
     while (choice.size() != 1 && isdigit(choice[0])) {
-        cout << "please enter a number that is between(1-5): ";
+        cout << "please enter a number that is between(1-9): ";
         getline(cin >> ws, choice);
     }
     y = stoi(choice);
