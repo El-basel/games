@@ -92,7 +92,7 @@ void ultimate_board<T>::display_board() {
         cout << i+1 << " | ";
         if((i+1)%3 == 0 && i != 8) cout << "   " << "| ";
     }
-    cout << '\n' << string(65,'-') << '\n';
+    cout << '\n' << string(55,'-') << '\n';
     for(int i = 0; i < this->rows;++i){
         cout << i + 1 << " || ";
         for(int j = 0; j < this->columns;++j){
@@ -100,12 +100,13 @@ void ultimate_board<T>::display_board() {
             if((j+1)%3 == 0 && j != 8)cout << "   " << "| ";
         }
         cout << '\n';
-        if((i+1)%3 == 0) cout << string(65,'-') << '\n';
+        if((i+1)%3 == 0) cout << string(55,'-') << '\n';
     }
 }
 
 template<typename T>
 void ultimate_board<T>::display_status() {
+    cout << "\n=== STATUS BOARD ===\n";
     cout << string(9,'-') << '\n';
     for(int i = 0; i < 3;++i){
         cout << '|';
@@ -115,6 +116,7 @@ void ultimate_board<T>::display_status() {
         cout <<'\n' <<string(9,'-') <<'\n';
 
     }
+    cout << "=====================\n";
 }
 
 template<typename T>
@@ -223,7 +225,7 @@ void ultimate_Player<T>::getmove(int& x, int& y) {
 //---------------------------------------------
 template<typename T>
 ultimate_Random<T>::ultimate_Random(T symbol) : RandomPlayer<T>(symbol) {
-    this->dimension = 3;
+    this->dimension = 9;
     this->name = "Random Computer Player";
     srand(static_cast<unsigned int>(time(NULL)));  // Seed the random number generator
 }
