@@ -48,7 +48,7 @@ bool Board6x7::update_board(int x, int y, char symbol) {
             this->n_moves++;
             this->board[x][y] = toupper(symbol);
         }
-        std::cout << "\x1b[16;1H";
+        std::cout << "\x1b[13A";
         return true;
     }
     return false;

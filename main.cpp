@@ -218,6 +218,8 @@ void numericalTicTacToe()
             cout << "Invalid choice for Player 2. Exiting the game.\n";
             return;
     }
+    players[0]->setBoard(board);
+    players[1]->setBoard(board);
     GameManager<int> numerical_tic_tac_toe(board, players);
     numerical_tic_tac_toe.run();
 

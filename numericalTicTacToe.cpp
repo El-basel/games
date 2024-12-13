@@ -29,6 +29,20 @@ Board3x3::Board3x3() {
     this->n_moves = 0;
 }
 
+bool Board3x3::is_valid(std::vector<int>& validMoves, int symbol, int x, int y) {
+    if(board[x][y] == 0)
+    {
+        for (auto i = validMoves.begin(); i != validMoves.end() ; ++i) {
+            if(symbol == *i)
+            {
+                validMoves.erase(i);
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
 bool Board3x3::update_board(int x, int y, int symbol) {
     if(!(x < 0 || x > this->rows || y < 0 || y > this->columns) &&
             (this->board[x][y] == 0 || symbol == 0))
@@ -43,7 +57,7 @@ bool Board3x3::update_board(int x, int y, int symbol) {
             this->n_moves++;
             this->board[x][y] = symbol;
         }
-        std::cout << "\x1b[22;1H";
+        std::cout << "\x1b[7A";
         return true;
     }
     return false;
@@ -90,7 +104,7 @@ bool Board3x3::is_win() {
 }
 
 bool Board3x3::is_draw() {
-    return (this->n_moves == 9 && !is_win());
+    return (this->n_moves == 8 && !is_win());
 }
 
 bool Board3x3::game_is_over() {
@@ -140,29 +154,13 @@ Numerical_Tic_Tac_Toe_Player::Numerical_Tic_Tac_Toe_Player(int symbol)
     }
 }
 
-bool Numerical_Tic_Tac_Toe_Player::is_valid() {
-    for (auto i = validMoves.begin(); i != validMoves.end() ; ++i) {
-        if(symbol == *i)
-        {
-            validMoves.erase(i);
-            return true;
-        }
-    }
-    std::cout << "\x1b[1A";
-    std::cout << "\x1b[K";
-    return false;
-}
-
 void Numerical_Tic_Tac_Toe_Player::getmove(int &x, int &y) {
+    Board3x3* board = dynamic_cast<Board3x3*>(boardPtr);
     do{
         std::cout << "Please enter a your move x (0 to 3) and y (0 to 3) and ";
         std::cout << (evenOrOdd == 'E' ? "Even" : "Odd") << " numbers separated by spaces: ";
         std::cin >> x >> y >> symbol;
-    } while(inputStreamFailing() || !is_valid());
-    if(x < 0 || x > 2 || y < 0 || y > 2)
-    {
-        this->validMoves.push_back(symbol);
-    }
+    } while(inputStreamFailing() || !board->is_valid(validMoves, symbol, x, y));
     std::cout << "\x1b[1A";
     std::cout << "\x1b[K";
 }
@@ -189,23 +187,14 @@ Numerical_Tic_Tac_Toe_Random_Player::Numerical_Tic_Tac_Toe_Random_Player(int sym
     }
 }
 
-bool Numerical_Tic_Tac_Toe_Random_Player::is_valid() {
-    for (auto i = validMoves.begin(); i != validMoves.end() ; ++i) {
-        if(symbol == *i)
-        {
-            validMoves.erase(i);
-            return true;
-        }
-    }
-    return false;
-}
 
 void Numerical_Tic_Tac_Toe_Random_Player::getmove(int &x, int &y) {
+    Board3x3* board = dynamic_cast<Board3x3*>(boardPtr);
     std::srand(std::time(nullptr));
-    x = std::rand() % 3;
-    y = std::rand() % 3;
     do {
+        x = std::rand() % 3;
+        y = std::rand() % 3;
         symbol = std::rand() % 9;
-    }while(!is_valid());
+    }while(!board->is_valid(validMoves, symbol, x, y));
 }
 // End Numerical_Tic_Tac_Toe_Random_Player class

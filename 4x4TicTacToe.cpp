@@ -15,7 +15,6 @@ inline bool inputStreamFailing()
 
 // Board4x4 class implementation
 Board4x4::Board4x4() {
-    std::srand(543);
     this->rows = 4;
     this->columns = 4;
     this->board = new char* [this->rows];
@@ -56,6 +55,7 @@ bool Board4x4::update_board(int x, int y, char symbol) {
             this->board[x][y] = symbol;
             this->board[oldX][oldY] = 0;
         }
+        std::cout << "\x1b[9A";
         return true;
     }
     return false;
@@ -117,7 +117,7 @@ bool Board4x4::is_valid_cell(int newX, int newY, int oldX, int oldY, char symbol
     {
         return false;
     }
-    if(board[oldX][oldY] != symbol)
+    if(board[oldX][oldY] != symbol || board[newX][newY] != 0)
     {
         return false;
     }
@@ -133,7 +133,7 @@ void Board4x4::setOldY(int y) {
 
 bool Board4x4::is_draw() {
     // check the conditions of draw again (the number of moves)
-    return (this->n_moves == 42 && !is_win());
+    return false;
 }
 
 bool Board4x4::game_is_over() {
@@ -157,6 +157,8 @@ void Player4x4::getmove(int &x, int &y) {
         std::cin >> x >> y;
 
     } while(inputStreamFailing() || !(board4X4->is_valid_cell(x, y, oldX, oldY, symbol)));
+    std::cout << "\x1b[1A";
+    std::cout << "\x1b[K";
     board4X4->setOldX(oldX);
     board4X4->setOldY(oldY);
 }
@@ -182,6 +184,7 @@ Random_Player4x4::Random_Player4x4(char symbol) : RandomPlayer(symbol){
 }
 
 void Random_Player4x4::getmove(int &x, int &y) {
+    std::srand(std::time(nullptr));
     int oldX, oldY,index;
     int moves[3] = {-1,0,1};
     Board4x4* board4X4 = dynamic_cast<Board4x4*>(boardPtr);

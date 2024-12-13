@@ -11,6 +11,7 @@ public:
     bool is_win() override;
     bool is_draw() override;
     bool game_is_over() override;
+    bool is_valid(std::vector<int>& validMoves, int symbol, int x ,int y);
 };
 class Numerical_Tic_Tac_Toe_Player : public Player<int> {
 protected:
@@ -20,7 +21,6 @@ public:
     Numerical_Tic_Tac_Toe_Player(std::string n, int symbol);
     Numerical_Tic_Tac_Toe_Player(int symbol);
     void getmove(int& x, int& y) override;
-    bool is_valid();
 };
 
 class Numerical_Tic_Tac_Toe_Random_Player : public RandomPlayer<int>{
@@ -30,6 +30,5 @@ protected:
 public:
     Numerical_Tic_Tac_Toe_Random_Player(int symbol);
     void getmove(int& x, int& y) override;
-    bool is_valid();
 };
 #endif //GAMES_NUMERICAL_TIC_TAC_TOE_H
