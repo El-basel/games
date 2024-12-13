@@ -158,18 +158,21 @@ bool ultimate_board<T>::game_is_over() {
 
 template<typename T>
 bool ultimate_board<T>::check_win(int& x, int& y) {
+    //Adjust x and y to be on the top left corner of the sub board
+    int xc = (x / 3) * 3;
+    int yc = (y / 3) * 3;
     //check rows and colums of the given subboard index for a win
     for (int i = 0; i < 3; i++) {
-        if ((this->board[x + i][y] == this->board[x + i][y + 1] && this->board[x + i][y + 1] == this->board[x + i][y + 2] && this->board[x + i][y] != 0) ||
-            (this->board[x][y + i] == this->board[x + 1][y + i] && this->board[x + 1][y + i] == this->board[x + 2][y + i] && this->board[x][y + i] != 0)) {
+        if ((this->board[xc + i][yc] == this->board[xc + i][yc + 1] && this->board[xc + i][yc + 1] == this->board[xc + i][yc + 2] && this->board[xc + i][yc] != 0) ||
+            (this->board[xc][yc + i] == this->board[xc + 1][yc + i] && this->board[xc + 1][yc + i] == this->board[xc + 2][yc + i] && this->board[xc][yc + i] != 0)) {
 
             return true;
         }
     }
 
     //check diagonals of the given subboard index for a win
-    if ((this->board[x][y] == this->board[x + 1][y + 1] && this->board[x + 1][y + 1] == this->board[x + 2][y + 2] && this->board[x][y] != 0) ||
-        (this->board[x][y + 2] == this->board[x + 1][y + 1] && this->board[x + 1][y + 1] == this->board[x + 2][y] && this->board[x][y + 2] != 0)) {
+    if ((this->board[xc][yc] == this->board[xc + 1][yc + 1] && this->board[xc + 1][yc + 1] == this->board[xc + 2][yc + 2] && this->board[xc][yc] != 0) ||
+        (this->board[xc][yc + 2] == this->board[xc + 1][yc + 1] && this->board[xc + 1][yc + 1] == this->board[xc + 2][yc] && this->board[xc][yc + 2] != 0)) {
 
         return true;
     }
@@ -179,16 +182,20 @@ bool ultimate_board<T>::check_win(int& x, int& y) {
 
 template<typename T>
 bool ultimate_board<T>::check_draw(int& x, int& y) {
+    //Adjust x and y to be on the top left corner of the sub board
+    int xc = (x / 3) * 3;
+    int yc = (y / 3) * 3;
+
     //loop through each sub board slot and check if theyre all filled or not
     for (int i = 0; i < 3; i++) {
         for (int j = 0; j < 3; j++) {
-            if (this->board[x + i][y + j] == 0) {
+            if (this->board[xc + i][yc + j] == 0) {
                 return false;
             }
         }
     }
     
-    return true;
+    return !check_win(x, y);
 }
 //---------------------------------------------
 template<typename T>

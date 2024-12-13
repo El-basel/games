@@ -39,6 +39,9 @@ void ultimateXO(){
     Board<char>* B = new ultimate_board<char>();
     string player1Name, player2Name;
     int type1,type2;
+    std::cout << "---------------------------------\n";
+    std::cout << "|    Welcome to Ultimate XO     |\n";
+    std::cout << "---------------------------------\n";
     getNameAndType(player1Name,player2Name, type1, type2);
     switch(type1) {
         case 1:
@@ -53,10 +56,10 @@ void ultimateXO(){
     }
     switch(type2) {
         case 1:
-            players[0] = new ultimate_Player<char>(player2Name, 'O');
+            players[1] = new ultimate_Player<char>(player2Name, 'O');
             break;
         case 2:
-            players[0] = new ultimate_Random<char>('O');
+            players[1] = new ultimate_Random<char>('O');
             break;
         default:
             cout << "Invalid choice for Player 2. Exiting the game.\n";
@@ -69,6 +72,7 @@ void ultimateXO(){
         delete player;
     }
 }
+
 void misere(){
     Player<char>* players[2];
     Board<char>* B = new misere_board<char>();
