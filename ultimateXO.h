@@ -92,7 +92,7 @@ void ultimate_board<T>::display_board() {
         cout << i+1 << " | ";
         if((i+1)%3 == 0 && i != 8) cout << "   " << "| ";
     }
-    cout << '\n' << string(65,'-') << '\n';
+    cout << '\n' << string(55,'-') << '\n';
     for(int i = 0; i < this->rows;++i){
         cout << i + 1 << " || ";
         for(int j = 0; j < this->columns;++j){
@@ -100,12 +100,13 @@ void ultimate_board<T>::display_board() {
             if((j+1)%3 == 0 && j != 8)cout << "   " << "| ";
         }
         cout << '\n';
-        if((i+1)%3 == 0) cout << string(65,'-') << '\n';
+        if((i+1)%3 == 0) cout << string(55,'-') << '\n';
     }
 }
 
 template<typename T>
 void ultimate_board<T>::display_status() {
+    cout << "\n=== STATUS BOARD ===\n";
     cout << string(9,'-') << '\n';
     for(int i = 0; i < 3;++i){
         cout << '|';
@@ -115,6 +116,7 @@ void ultimate_board<T>::display_status() {
         cout <<'\n' <<string(9,'-') <<'\n';
 
     }
+    cout << "=====================\n";
 }
 
 template<typename T>
@@ -158,18 +160,21 @@ bool ultimate_board<T>::game_is_over() {
 
 template<typename T>
 bool ultimate_board<T>::check_win(int& x, int& y) {
+    //Adjust x and y to be on the top left corner of the sub board
+    int xc = (x / 3) * 3;
+    int yc = (y / 3) * 3;
     //check rows and colums of the given subboard index for a win
     for (int i = 0; i < 3; i++) {
-        if ((this->board[x + i][y] == this->board[x + i][y + 1] && this->board[x + i][y + 1] == this->board[x + i][y + 2] && this->board[x + i][y] != 0) ||
-            (this->board[x][y + i] == this->board[x + 1][y + i] && this->board[x + 1][y + i] == this->board[x + 2][y + i] && this->board[x][y + i] != 0)) {
+        if ((this->board[xc + i][yc] == this->board[xc + i][yc + 1] && this->board[xc + i][yc + 1] == this->board[xc + i][yc + 2] && this->board[xc + i][yc] != 0) ||
+            (this->board[xc][yc + i] == this->board[xc + 1][yc + i] && this->board[xc + 1][yc + i] == this->board[xc + 2][yc + i] && this->board[xc][yc + i] != 0)) {
 
             return true;
         }
     }
 
     //check diagonals of the given subboard index for a win
-    if ((this->board[x][y] == this->board[x + 1][y + 1] && this->board[x + 1][y + 1] == this->board[x + 2][y + 2] && this->board[x][y] != 0) ||
-        (this->board[x][y + 2] == this->board[x + 1][y + 1] && this->board[x + 1][y + 1] == this->board[x + 2][y] && this->board[x][y + 2] != 0)) {
+    if ((this->board[xc][yc] == this->board[xc + 1][yc + 1] && this->board[xc + 1][yc + 1] == this->board[xc + 2][yc + 2] && this->board[xc][yc] != 0) ||
+        (this->board[xc][yc + 2] == this->board[xc + 1][yc + 1] && this->board[xc + 1][yc + 1] == this->board[xc + 2][yc] && this->board[xc][yc + 2] != 0)) {
 
         return true;
     }
@@ -179,16 +184,20 @@ bool ultimate_board<T>::check_win(int& x, int& y) {
 
 template<typename T>
 bool ultimate_board<T>::check_draw(int& x, int& y) {
+    //Adjust x and y to be on the top left corner of the sub board
+    int xc = (x / 3) * 3;
+    int yc = (y / 3) * 3;
+
     //loop through each sub board slot and check if theyre all filled or not
     for (int i = 0; i < 3; i++) {
         for (int j = 0; j < 3; j++) {
-            if (this->board[x + i][y + j] == 0) {
+            if (this->board[xc + i][yc + j] == 0) {
                 return false;
             }
         }
     }
     
-    return true;
+    return !check_win(x, y);
 }
 //---------------------------------------------
 template<typename T>
@@ -197,17 +206,17 @@ ultimate_Player<T>::ultimate_Player(const string& name , T symbol) : Player<T>(n
 template<typename T>
 void ultimate_Player<T>::getmove(int& x, int& y) {
     string choice;
-    cout << "please enter the row of your choice(1-5): ";
+    cout << "please enter the row of your choice(1-9): ";
     getline(cin >> ws, choice);
     while (choice.size() != 1 && isdigit(choice[0])) {
-        cout << "please enter a number that is between(1-5): ";
+        cout << "please enter a number that is between(1-9): ";
         getline(cin >> ws, choice);
     }
     x = stoi(choice);
-    cout << "please enter the column of your choice(1-5): ";
+    cout << "please enter the column of your choice(1-9): ";
     getline(cin >> ws, choice);
     while (choice.size() != 1 && isdigit(choice[0])) {
-        cout << "please enter a number that is between(1-5): ";
+        cout << "please enter a number that is between(1-9): ";
         getline(cin >> ws, choice);
     }
     y = stoi(choice);
@@ -216,7 +225,7 @@ void ultimate_Player<T>::getmove(int& x, int& y) {
 //---------------------------------------------
 template<typename T>
 ultimate_Random<T>::ultimate_Random(T symbol) : RandomPlayer<T>(symbol) {
-    this->dimension = 3;
+    this->dimension = 9;
     this->name = "Random Computer Player";
     srand(static_cast<unsigned int>(time(NULL)));  // Seed the random number generator
 }

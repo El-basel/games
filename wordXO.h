@@ -28,6 +28,7 @@ public:
 	Word_Tic_Tac_Toe_Player(string name, T symbol);
 	T getsymbol();
 	void getmove(int& x, int& y) override;
+	bool is_valid(string text, string player);
 };
 
 template <typename T>
@@ -38,27 +39,8 @@ public:
 	Word_Tic_Tac_Toe_Random_Player(T symbol, Word_Board<T>& board);
 	T getsymbol();
 	void getmove(int& x, int& y) override;
+	char random_symbol();
 };
-
-bool is_valid(string text, string player) {
-	if (text.length() != 1) {
-		cout << "\nPlayer '" << player << "' Please enter a single character from 'A' to 'Z': ";
-		return false;
-	}
-	string upper_text;
-	upper_text = toupper(text[0]);
-
-	if (upper_text[0] < 'A' || upper_text[0] > 'Z') {
-		cout << "\nPlease enter a character from 'a' to 'z': ";
-		return false;
-	}
-
-	return true;
-}
-
-char random_symbol() {
-	return 'A' + (rand() % 26);
-}
 
 //============== IMPLEMENTATION ==============//
 
@@ -244,6 +226,23 @@ void Word_Tic_Tac_Toe_Player<T>::getmove(int& x, int& y) {
 	getsymbol();
 }
 
+template <typename T>
+bool Word_Tic_Tac_Toe_Player<T>::is_valid(string text, string player) {
+	if (text.length() != 1) {
+		cout << "\nPlayer '" << player << "' Please enter a single character from 'A' to 'Z': ";
+		return false;
+	}
+	string upper_text;
+	upper_text = toupper(text[0]);
+
+	if (upper_text[0] < 'A' || upper_text[0] > 'Z') {
+		cout << "\nPlease enter a character from 'a' to 'z': ";
+		return false;
+	}
+
+	return true;
+}
+
 //=======End of Word_Tic_Tac_Toe_Player=======//
 
 
@@ -269,6 +268,11 @@ void Word_Tic_Tac_Toe_Random_Player<T>::getmove(int& x, int& y) {
 	} while (board.getBoard()[x][y] != 0);
 	
 	this->symbol = random_symbol();
+}
+
+template <typename T>
+char Word_Tic_Tac_Toe_Random_Player<T>::random_symbol() {
+	return 'A' + (rand() % 26);
 }
 
 
