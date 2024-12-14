@@ -21,7 +21,6 @@ public:
 template <typename T>
 class misere_Player : public Player<T> {
 public:
-    bool isvalid(const string&);
     misere_Player (string name, T symbol,Board<T>* bptr);
     void getmove(int& x, int& y) ;
 
@@ -139,28 +138,19 @@ misere_Player<T>::misere_Player(string name, T symbol,Board<T>* bptr) : Player<T
     this->setBoard(bptr);
 }
 template <typename T>
-bool misere_Player<T>::isvalid(const string& input) {
-    for (char i : input) {
-        if (!isdigit(i)) {
-            return false;
-        }
-    }
-    return true;
-}
-template <typename T>
 void misere_Player<T>::getmove(int& x, int& y) {
     if(this->boardPtr->is_win()) return;
     string choice = "";
     cout << "please enter the row of your choice(1-3): ";
     getline(cin >> ws, choice);
-    while (choice.size() != 1 && !isvalid(choice)) {
+    while (choice.size() != 1 || !isdigit(choice[0])) {
         cout << "please enter a number that is between(1-3): ";
         getline(cin >> ws, choice);
     }
     x = stoi(choice);
     cout << "please enter the column of your choice(1-3): ";
     getline(cin >> ws, choice);
-    while (choice.size() != 1 && !isvalid(choice)) {
+    while (choice.size() != 1 || !isdigit(choice[0])) {
         cout << "please enter a number that is between(1-3): ";
         getline(cin >> ws, choice);
     }
@@ -179,6 +169,7 @@ misere_Random_Player<T>::misere_Random_Player(T symbol,Board<T>* bptr) : RandomP
 
 template <typename T>
 void misere_Random_Player<T>::getmove(int& x, int& y) {
+    if(this->boardPtr->is_win()) return;
     x = rand() % this->dimension;  // Random number between 0 and 2
     y = rand() % this->dimension;
 }

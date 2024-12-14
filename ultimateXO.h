@@ -208,14 +208,14 @@ void ultimate_Player<T>::getmove(int& x, int& y) {
     string choice;
     cout << "please enter the row of your choice(1-9): ";
     getline(cin >> ws, choice);
-    while (choice.size() != 1 && isdigit(choice[0])) {
+    while (choice.size() != 1 || !isdigit(choice[0])) {
         cout << "please enter a number that is between(1-9): ";
         getline(cin >> ws, choice);
     }
     x = stoi(choice);
     cout << "please enter the column of your choice(1-9): ";
     getline(cin >> ws, choice);
-    while (choice.size() != 1 && isdigit(choice[0])) {
+    while (choice.size() != 1 || !isdigit(choice[0])) {
         cout << "please enter a number that is between(1-9): ";
         getline(cin >> ws, choice);
     }

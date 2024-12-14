@@ -27,7 +27,6 @@ private:
     bool& win;
 public:
 	_5x5_player(string, T,bool&);
-	bool isvalid(const string&);
 	void getmove(int&, int&);
 };
 template<typename T>
@@ -208,29 +207,20 @@ void _5x5_board<T>::show_score() {
 //----------------------------------------------
 template <typename T>
 _5x5_player<T>::_5x5_player(string name, T symbol,bool& w) : Player<T>(name, symbol),win(w){}
-template <typename T>
-bool _5x5_player<T>::isvalid(const string& input) {
-	for (char i : input) {
-		if (!isdigit(i)) {
-			return false;
-		}
-	}
-	return true;
-}
 template<typename T>
 void _5x5_player<T>::getmove(int& x, int& y){
     if(this->win) return;
 	string choice;
 	cout << "please enter the row of your choice(1-5): ";
 	getline(cin >> ws, choice);
-	while (choice.size() != 1 && !isvalid(choice)) {
+	while (choice.size() != 1 || !isdigit(choice[0])) {
 		cout << "please enter a number that is between(1-5): ";
 		getline(cin >> ws, choice);
 	}
 	x = stoi(choice);
 	cout << "please enter the column of your choice(1-5): ";
 	getline(cin >> ws, choice);
-	while (choice.size() != 1 && !isvalid(choice)) {
+	while (choice.size() != 1 || !isdigit(choice[0])) {
 		cout << "please enter a number that is between(1-5): ";
 		getline(cin >> ws, choice);
 	}
