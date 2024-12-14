@@ -9,6 +9,7 @@ private:
     //this shows the status of each board
     T** status;
     set<int>played;
+    bool end;
 public:
     ultimate_board();
     //checks win on the status board
@@ -63,6 +64,7 @@ ultimate_board<T>::ultimate_board() {
         }
     }
     this->n_moves = 0;
+    this->end = false;
 }
 
 template<typename T>
@@ -80,7 +82,8 @@ bool ultimate_board<T>::update_board(int x, int y, T symbol) {
             played.insert(b);
         }
         display_status();
-    }
+    }else if (x == y && x == -1) this->end = true;
+
     else return false;
     return true;
 }
@@ -155,7 +158,7 @@ bool ultimate_board<T>::is_draw() {
 
 template<typename T>
 bool ultimate_board<T>::game_is_over() {
-    return (is_win() || is_draw());
+    return (is_win() || is_draw() || this->end);
 }
 
 template<typename T>
@@ -205,9 +208,16 @@ ultimate_Player<T>::ultimate_Player(const string& name , T symbol) : Player<T>(n
 
 template<typename T>
 void ultimate_Player<T>::getmove(int& x, int& y) {
+    if(this->boardPtr->game_is_over()) return;
     string choice;
+    cout << "enter 'return' to return to menu\n";
     cout << "please enter the row of your choice(1-9): ";
     getline(cin >> ws, choice);
+    if(choice == "return"){
+        x = -1;
+        y = -1;
+        return;
+    }
     while (choice.size() != 1 || !isdigit(choice[0])) {
         cout << "please enter a number that is between(1-9): ";
         getline(cin >> ws, choice);
@@ -232,6 +242,7 @@ ultimate_Random<T>::ultimate_Random(T symbol) : RandomPlayer<T>(symbol) {
 
 template<typename T>
 void ultimate_Random<T>::getmove(int &x, int &y) {
+    if(this->boardPtr->game_is_over()) return;
     x = rand() % this->dimension;
     y = rand() % this->dimension;
 }

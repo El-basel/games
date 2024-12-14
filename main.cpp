@@ -65,6 +65,8 @@ void ultimateXO(){
             cout << "Invalid choice for Player 2. Exiting the game.\n";
             return;
     }
+    players[0]->setBoard(B);
+    players[1]->setBoard(B);
     GameManager<char> x_o_game(B, players);
     x_o_game.run();
     delete B;
@@ -140,6 +142,8 @@ void _5x5(){
             return;
     }
     Board<char>* B = new _5x5_board<char>(players,win);
+    players[0]->setBoard(B);
+    players[1]->setBoard(B);
     GameManager<char> game(B, players);
     game.run();
     delete B;
