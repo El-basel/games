@@ -150,7 +150,7 @@ bool ultimate_board<T>::is_draw() {
     //if all moves in the main board is played
     //and theres no win in the status board
     //game is a draw
-    return (this->n_moves == 81 && !is_win());
+    return (this->played.size() == 9 && !is_win());
 }
 
 template<typename T>
