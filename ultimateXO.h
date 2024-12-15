@@ -69,6 +69,11 @@ ultimate_board<T>::ultimate_board() {
 
 template<typename T>
 bool ultimate_board<T>::update_board(int x, int y, T symbol) {
+    if (x == y && x == -1){
+        this->end = true;
+        return true;
+    }
+    --x;--y;
     int b = board_finder(x,y);
     if (!(x < 0 || x >= this->rows || y < 0 || y >= this->columns) && (this->board[x][y] == 0) && !played.count(b)) {
         this->board[x][y] = toupper(symbol);
@@ -81,9 +86,8 @@ bool ultimate_board<T>::update_board(int x, int y, T symbol) {
             status[x/3][y/3] = 'd';
             played.insert(b);
         }
-        display_status();
-    }else if (x == y && x == -1) this->end = true;
-
+        cout << "\x1b[24A";
+    }
     else return false;
     return true;
 }
@@ -105,6 +109,7 @@ void ultimate_board<T>::display_board() {
         cout << '\n';
         if((i+1)%3 == 0) cout << string(55,'-') << '\n';
     }
+    this->display_status();
 }
 
 template<typename T>
@@ -151,7 +156,7 @@ bool ultimate_board<T>::is_win() {
 template<typename T>
 bool ultimate_board<T>::is_draw() {
     //if all moves in the main board is played
-    //and theres no win in the status board
+    //and there's no win in the status board
     //game is a draw
     return (this->played.size() == 9 && !is_win());
 }
@@ -210,14 +215,14 @@ template<typename T>
 void ultimate_Player<T>::getmove(int& x, int& y) {
     if(this->boardPtr->game_is_over()) return;
     string choice;
-    cout << "enter 'return' to return to menu\n";
     while (choice.size() != 3 || !isdigit(choice[0]) || !isdigit(choice[2])) {
-        if(!choice.empty()) {
-            cout << "\x1b[1A";
-            cout << "\x1b[k";
-        }
+        cout << "enter 'return' to return to menu\n";
         cout << "Enter your move as two numbers \"row column\", separated by a space: ";
-        getline(cin >> ws, choice);
+        getline(cin, choice);
+        cout << "\x1b[1A";
+        cout << "\x1b[K";
+        cout << "\x1b[1A";
+        cout << "\x1b[K";
         if(choice == "return"){
             x = -1;
             y = -1;
@@ -226,7 +231,6 @@ void ultimate_Player<T>::getmove(int& x, int& y) {
     }
     x = static_cast<int>(choice[0]) - '0';
     y = static_cast<int>(choice[2]) - '0';
-    --x;--y;
 }
 //---------------------------------------------
 template<typename T>
