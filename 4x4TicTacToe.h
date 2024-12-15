@@ -16,6 +16,7 @@ public:
     bool is_valid_cell(int newX, int newY, int oldX, int oldY, char symbol);
     void setOldX(int);
     void setOldY(int);
+    ~Board4x4();
 };
 
 class Player4x4 : public Player<char> {

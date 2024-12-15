@@ -29,6 +29,14 @@ Board6x7::Board6x7() {
     this->n_moves = 0;
 }
 
+Board6x7::~Board6x7()
+{
+    for (int i = 0; i < this->rows; ++i) {
+        delete [] this->board[i];
+    }
+    delete [] this->board;
+}
+
 bool Board6x7::is_valid_cell(int x, int y) {
     // if the user chooses the last row or chooses a row that has a used row underneath it
     if((x == (this->rows - 1) || this->board[x+1][y] != 0)) {

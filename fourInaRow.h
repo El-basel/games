@@ -12,6 +12,7 @@ public:
     bool is_draw() override;
     bool game_is_over() override;
     bool is_valid_cell(int x, int y);
+    ~Board6x7();
 };
 
 class Four_In_A_Row_Player : public Player<char> {
