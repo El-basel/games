@@ -16,6 +16,7 @@ public:
     bool is_win();
     bool is_draw();
     bool game_is_over();
+    ~misere_board();
 
 };
 
@@ -134,6 +135,13 @@ bool misere_board<T>::is_draw() {
 template <typename T>
 bool misere_board<T>::game_is_over() {
     return is_win() || is_draw() || this->end;
+}
+template<typename T>
+misere_board<T>::~misere_board() {
+    for (int i = 0; i < this->rows; ++i) {
+        delete [] this->board[i];
+    }
+    delete [] this->board;
 }
 
 //--------------------------------------

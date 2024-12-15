@@ -20,6 +20,7 @@ public:
 	bool is_draw();
 	bool game_is_over();
     void show_score();
+    ~_5x5_board();
 };
 template<typename T>
 class _5x5_player : public Player<T>{
@@ -209,6 +210,13 @@ void _5x5_board<T>::show_score() {
     cout << " ======================\n";
 }
 
+template<typename T>
+_5x5_board<T>::~_5x5_board() {
+    for (int i = 0; i < this->rows; ++i) {
+        delete [] this->board[i];
+    }
+    delete [] this->board;
+}
 //----------------------------------------------
 template <typename T>
 _5x5_player<T>::_5x5_player(string name, T symbol,bool& w) : Player<T>(name, symbol),win(w){}

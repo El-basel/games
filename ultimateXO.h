@@ -26,6 +26,7 @@ public:
     bool check_win(int&,int&);
     //checks if there is a draw on the given indices subboard
     bool check_draw(int&,int&);
+    ~ultimate_board();
 };
 
 template<typename T>
@@ -205,6 +206,18 @@ bool ultimate_board<T>::check_draw(int& x, int& y) {
     }
     
     return !check_win(x, y);
+}
+
+template<typename T>
+ultimate_board<T>::~ultimate_board() {
+    for (int i = 0; i < this->rows; ++i) {
+        delete [] this->board[i];
+    }
+    delete [] this->board;
+    for (int i = 0; i < 3; ++i) {
+        delete [] this->status[i];
+    }
+    delete[] this->status;
 }
 //---------------------------------------------
 template<typename T>
