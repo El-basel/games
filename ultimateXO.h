@@ -212,7 +212,10 @@ void ultimate_Player<T>::getmove(int& x, int& y) {
     string choice;
     cout << "enter 'return' to return to menu\n";
     while (choice.size() != 3 || !isdigit(choice[0]) || !isdigit(choice[2])) {
-//        if(!choice.empty())
+        if(!choice.empty()) {
+            cout << "\x1b[1A";
+            cout << "\x1b[k";
+        }
         cout << "Enter your move as two numbers \"row column\", separated by a space: ";
         getline(cin >> ws, choice);
         if(choice == "return"){
