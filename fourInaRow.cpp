@@ -173,9 +173,9 @@ void Four_In_A_Row_Player::getmove(int &x, int &y) {
     do{
         std::cout << "Please enter a your move x (0 to 5) and y (0 to 6) separated by spaces: ";
         std::cin >> x >> y;
+        std::cout << "\x1b[1A";
+        std::cout << "\x1b[K";
     } while(inputStreamFailing());
-    std::cout << "\x1b[1A";
-    std::cout << "\x1b[K";
 }
 
 // End Four_In_A_Row_Player class

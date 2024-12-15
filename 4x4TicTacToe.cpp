@@ -155,10 +155,14 @@ void Player4x4::getmove(int &x, int &y) {
         std::cin >> oldX >> oldY;
         std::cout << "Enter the New Position as x (0 to 3) and y (0 to 3) separated by spaces: ";
         std::cin >> x >> y;
+        std::cout << "\x1b[1A";
+        std::cout << "\x1b[K";
+        std::cout << "\x1b[1A";
+        std::cout << "\x1b[K";
+        std::cout << "\x1b[1A";
+        std::cout << "\x1b[K";
 
     } while(inputStreamFailing() || !(board4X4->is_valid_cell(x, y, oldX, oldY, symbol)));
-    std::cout << "\x1b[1A";
-    std::cout << "\x1b[K";
     board4X4->setOldX(oldX);
     board4X4->setOldY(oldY);
 }

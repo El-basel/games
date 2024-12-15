@@ -160,9 +160,9 @@ void Numerical_Tic_Tac_Toe_Player::getmove(int &x, int &y) {
         std::cout << "Please enter a your move x (0 to 3) and y (0 to 3) and ";
         std::cout << (evenOrOdd == 'E' ? "Even" : "Odd") << " numbers separated by spaces: ";
         std::cin >> x >> y >> symbol;
+        std::cout << "\x1b[1A";
+        std::cout << "\x1b[K";
     } while(inputStreamFailing() || !board->is_valid(validMoves, symbol, x, y));
-    std::cout << "\x1b[1A";
-    std::cout << "\x1b[K";
 }
 // End Numerical_Tic_Tac_Toe_Player class
 /**************************************/
