@@ -211,25 +211,18 @@ void ultimate_Player<T>::getmove(int& x, int& y) {
     if(this->boardPtr->game_is_over()) return;
     string choice;
     cout << "enter 'return' to return to menu\n";
-    cout << "please enter the row of your choice(1-9): ";
-    getline(cin >> ws, choice);
-    if(choice == "return"){
-        x = -1;
-        y = -1;
-        return;
-    }
-    while (choice.size() != 1 || !isdigit(choice[0])) {
-        cout << "please enter a number that is between(1-9): ";
+    while (choice.size() != 3 || !isdigit(choice[0]) || !isdigit(choice[2])) {
+//        if(!choice.empty())
+        cout << "Enter your move as two numbers \"row column\", separated by a space: ";
         getline(cin >> ws, choice);
+        if(choice == "return"){
+            x = -1;
+            y = -1;
+            return;
+        }
     }
-    x = stoi(choice);
-    cout << "please enter the column of your choice(1-9): ";
-    getline(cin >> ws, choice);
-    while (choice.size() != 1 || !isdigit(choice[0])) {
-        cout << "please enter a number that is between(1-9): ";
-        getline(cin >> ws, choice);
-    }
-    y = stoi(choice);
+    x = static_cast<int>(choice[0]) - '0';
+    y = static_cast<int>(choice[2]) - '0';
     --x;--y;
 }
 //---------------------------------------------
