@@ -65,7 +65,11 @@ misere_board<T>::misere_board() {
 template <typename T>
 bool misere_board<T>::update_board(int x, int y, T symbol) {
     if(this->win) return true;
-    // Only update if move is valid
+    else if(x==y && x == -1){
+        this->end = true;
+        return true;
+    }
+    --x;--y;
     if (!(x < 0 || x >= this->rows || y < 0 || y >= this->columns)
     && (this->board[x][y] == 0 || symbol == 0)) {
         if (symbol == 0){
@@ -76,10 +80,7 @@ bool misere_board<T>::update_board(int x, int y, T symbol) {
             this->n_moves++;
             this->board[x][y] = toupper(symbol);
         }
-
-        return true;
-    }else if(x == y && x == -1){
-        this->end = true;
+        cout << "\x1b[8A";
         return true;
     }
     return false;
@@ -147,11 +148,14 @@ void misere_Player<T>::getmove(int& x, int& y) {
     if(this->boardPtr->is_win()) return;
     else if(this->boardPtr->game_is_over())return;
     string choice;
-    cout << "enter 'return' to return to menu\n";
     while (choice.size() != 3 || !isdigit(choice[0]) || !isdigit(choice[2])) {
-//        if(!choice.empty())
+        cout << "enter 'return' to return to menu\n";
         cout << "Enter your move as two numbers \"row column\", separated by a space: ";
-        getline(cin >> ws, choice);
+        getline(cin, choice);
+        cout << "\x1b[1A";
+        cout << "\x1b[K";
+        cout << "\x1b[1A";
+        cout << "\x1b[K";
         if(choice == "return"){
             x = -1;
             y = -1;
@@ -160,7 +164,6 @@ void misere_Player<T>::getmove(int& x, int& y) {
     }
     x = static_cast<int>(choice[0]) - '0';
     y = static_cast<int>(choice[2]) - '0';
-    --x;--y;
 }
 
 // Constructor for misere_Random_Player

@@ -33,7 +33,6 @@ class ultimate_Player: public Player<T>{
 public:
     ultimate_Player(const string&,T);
     void getmove(int&,int&) override;
-    //checks if the given string is a valid postive number
 };
 
 template<typename T>

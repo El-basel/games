@@ -62,10 +62,15 @@ _5x5_board<T>::_5x5_board(Player<T>* pptr[2],bool& w) : win(w) , end(false) {
 template<typename T>
 bool _5x5_board<T>::update_board(int x, int y, T symbol) {
     if(this->win) return true;
+    else if ((x == y) && x == -1) {
+        this->end = true;
+        return true;
+    }
+    --x;--y;
 	if (!(x < 0 || x >= this->rows || y < 0 || y >= this->columns) && (this->board[x][y] == 0)) {
 		this->board[x][y] = toupper(symbol);
 		this->n_moves++;
-	}else if ((x == y) && x == -1)this->end = true;
+	}
     else return false;
 	return true;
 }
@@ -212,11 +217,14 @@ void _5x5_player<T>::getmove(int& x, int& y){
     if(this->win) return;
     else if(this->boardPtr->game_is_over()) return;
     string choice;
-    cout << "enter 'return' to return to menu\n";
     while (choice.size() != 3 || !isdigit(choice[0]) || !isdigit(choice[2])) {
-//        if(!choice.empty())
+        cout << "enter 'return' to return to menu\n";
         cout << "Enter your move as two numbers \"row column\", separated by a space: ";
-        getline(cin >> ws, choice);
+        getline(cin, choice);
+        cout << "\x1b[1A";
+        cout << "\x1b[K";
+        cout << "\x1b[1A";
+        cout << "\x1b[K";
         if(choice == "return"){
             x = -1;
             y = -1;
@@ -225,7 +233,6 @@ void _5x5_player<T>::getmove(int& x, int& y){
     }
     x = static_cast<int>(choice[0]) - '0';
     y = static_cast<int>(choice[2]) - '0';
-    --x;--y;
 }
 //---------------------------------------------
 template<typename T>
