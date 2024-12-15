@@ -29,6 +29,14 @@ Board4x4::Board4x4() {
     this->n_moves = 0;
 }
 
+Board4x4::~Board4x4()
+{
+    for (int i = 0; i < this->rows; ++i) {
+        delete [] this->board[i];
+    }
+    delete [] this->board;
+}
+
 void Board4x4::display_board() {
     std::cout << std::string(38,'-') << std::endl;
     for (int i = 0; i < this->rows; ++i) {

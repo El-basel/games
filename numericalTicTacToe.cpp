@@ -29,6 +29,14 @@ Board3x3::Board3x3() {
     this->n_moves = 0;
 }
 
+Board3x3::~Board3x3()
+{
+    for (int i = 0; i < this->rows; ++i) {
+        delete [] this->board[i];
+    }
+    delete [] this->board;
+}
+
 bool Board3x3::is_valid(std::vector<int>& validMoves, int symbol, int x, int y) {
     if(board[x][y] == 0)
     {

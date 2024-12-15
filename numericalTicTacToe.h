@@ -12,6 +12,7 @@ public:
     bool is_draw() override;
     bool game_is_over() override;
     bool is_valid(std::vector<int>& validMoves, int symbol, int x ,int y);
+    ~Board3x3();
 };
 class Numerical_Tic_Tac_Toe_Player : public Player<int> {
 protected:
