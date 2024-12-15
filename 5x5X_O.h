@@ -4,13 +4,13 @@
 template<typename T>
 class _5x5_board : public Board<T>  {
 
-//    friend void _5x5_player<T>::getmove(int&,int&);
 private:
     set<int>counted;
     Player<T>* playerptr[2];
     int wins1;
     int wins2;
     bool& win;
+    bool end;
 public:
 
 	_5x5_board(Player<T>*[2],bool&);
@@ -27,7 +27,6 @@ private:
     bool& win;
 public:
 	_5x5_player(string, T,bool&);
-	bool isvalid(const string&);
 	void getmove(int&, int&);
 };
 template<typename T>
@@ -46,7 +45,7 @@ public:
 #include <iomanip>
 
 template<typename T>
-_5x5_board<T>::_5x5_board(Player<T>* pptr[2],bool& w) : win(w) {
+_5x5_board<T>::_5x5_board(Player<T>* pptr[2],bool& w) : win(w) , end(false) {
     this->rows = this->columns = 5;
     this->board = new char*[this->rows];
     for (int i = 0; i < 5; ++i) {
@@ -66,8 +65,8 @@ bool _5x5_board<T>::update_board(int x, int y, T symbol) {
 	if (!(x < 0 || x >= this->rows || y < 0 || y >= this->columns) && (this->board[x][y] == 0)) {
 		this->board[x][y] = toupper(symbol);
 		this->n_moves++;
-	}
-	else return false;
+	}else if ((x == y) && x == -1)this->end = true;
+    else return false;
 	return true;
 }
 
@@ -77,7 +76,7 @@ bool _5x5_board<T>::is_win() {
     if(this->win){
         this->show_score();
         return true;
-    }
+    }else if(this->end) return false;
     // Check all possible 3x3 subgrids in the 5x5 board
     //create a set for indices that are already taken
     for (int startRow = 0; startRow <= 2; ++startRow) {
@@ -174,7 +173,7 @@ bool _5x5_board<T>::is_draw(){
 }
 template<typename T>
 bool _5x5_board<T>::game_is_over() {
-	return(this->n_moves == 25);
+	return(this->n_moves == 25 || this->end);
 }
 template<typename T>
 void _5x5_board<T>::display_board() {
@@ -208,35 +207,25 @@ void _5x5_board<T>::show_score() {
 //----------------------------------------------
 template <typename T>
 _5x5_player<T>::_5x5_player(string name, T symbol,bool& w) : Player<T>(name, symbol),win(w){}
-template <typename T>
-bool _5x5_player<T>::isvalid(const string& input) {
-	for (char i : input) {
-		if (!isdigit(i)) {
-			return false;
-		}
-	}
-	return true;
-}
 template<typename T>
 void _5x5_player<T>::getmove(int& x, int& y){
     if(this->win) return;
-	string choice;
-	cout << "please enter the row of your choice(1-5): ";
-	getline(cin >> ws, choice);
-	while (choice.size() != 1 && !isvalid(choice)) {
-		cout << "please enter a number that is between(1-5): ";
-		getline(cin >> ws, choice);
-	}
-	x = stoi(choice);
-	cout << "please enter the column of your choice(1-5): ";
-	getline(cin >> ws, choice);
-	while (choice.size() != 1 && !isvalid(choice)) {
-		cout << "please enter a number that is between(1-5): ";
-		getline(cin >> ws, choice);
-	}
-	y = stoi(choice);
+    else if(this->boardPtr->game_is_over()) return;
+    string choice;
+    cout << "enter 'return' to return to menu\n";
+    while (choice.size() != 3 || !isdigit(choice[0]) || !isdigit(choice[2])) {
+//        if(!choice.empty())
+        cout << "Enter your move as two numbers \"row column\", separated by a space: ";
+        getline(cin >> ws, choice);
+        if(choice == "return"){
+            x = -1;
+            y = -1;
+            return;
+        }
+    }
+    x = static_cast<int>(choice[0]) - '0';
+    y = static_cast<int>(choice[2]) - '0';
     --x;--y;
-
 }
 //---------------------------------------------
 template<typename T>
@@ -247,6 +236,7 @@ _5x5_Random<T>::_5x5_Random(T symbol,bool& w) : RandomPlayer<T>(symbol),win(w) {
 template<typename T>
 void _5x5_Random<T>::getmove(int& x, int& y) {
     if(this->win) return;
+    else if(this->boardPtr->game_is_over())return;
     x = rand() % this->dimension;
 	y = rand() % this->dimension;
 }

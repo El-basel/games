@@ -8,6 +8,7 @@ template <typename T>
 class misere_board: public Board<T> {
 private:
     bool win;
+    bool end;
 public:
     misere_board ();
     bool update_board (int x , int y , T symbol);
@@ -21,7 +22,6 @@ public:
 template <typename T>
 class misere_Player : public Player<T> {
 public:
-    bool isvalid(const string&);
     misere_Player (string name, T symbol,Board<T>* bptr);
     void getmove(int& x, int& y) ;
 
@@ -59,6 +59,7 @@ misere_board<T>::misere_board() {
     }
     this->n_moves = 0;
     this->win = false;
+    this->end = false;
 }
 
 template <typename T>
@@ -76,6 +77,9 @@ bool misere_board<T>::update_board(int x, int y, T symbol) {
             this->board[x][y] = toupper(symbol);
         }
 
+        return true;
+    }else if(x == y && x == -1){
+        this->end = true;
         return true;
     }
     return false;
@@ -128,7 +132,7 @@ bool misere_board<T>::is_draw() {
 
 template <typename T>
 bool misere_board<T>::game_is_over() {
-    return is_win() || is_draw();
+    return is_win() || is_draw() || this->end;
 }
 
 //--------------------------------------
@@ -139,32 +143,23 @@ misere_Player<T>::misere_Player(string name, T symbol,Board<T>* bptr) : Player<T
     this->setBoard(bptr);
 }
 template <typename T>
-bool misere_Player<T>::isvalid(const string& input) {
-    for (char i : input) {
-        if (!isdigit(i)) {
-            return false;
-        }
-    }
-    return true;
-}
-template <typename T>
 void misere_Player<T>::getmove(int& x, int& y) {
     if(this->boardPtr->is_win()) return;
-    string choice = "";
-    cout << "please enter the row of your choice(1-3): ";
-    getline(cin >> ws, choice);
-    while (choice.size() != 1 && !isvalid(choice)) {
-        cout << "please enter a number that is between(1-3): ";
+    else if(this->boardPtr->game_is_over())return;
+    string choice;
+    cout << "enter 'return' to return to menu\n";
+    while (choice.size() != 3 || !isdigit(choice[0]) || !isdigit(choice[2])) {
+//        if(!choice.empty())
+        cout << "Enter your move as two numbers \"row column\", separated by a space: ";
         getline(cin >> ws, choice);
+        if(choice == "return"){
+            x = -1;
+            y = -1;
+            return;
+        }
     }
-    x = stoi(choice);
-    cout << "please enter the column of your choice(1-3): ";
-    getline(cin >> ws, choice);
-    while (choice.size() != 1 && !isvalid(choice)) {
-        cout << "please enter a number that is between(1-3): ";
-        getline(cin >> ws, choice);
-    }
-    y = stoi(choice);
+    x = static_cast<int>(choice[0]) - '0';
+    y = static_cast<int>(choice[2]) - '0';
     --x;--y;
 }
 
@@ -179,6 +174,8 @@ misere_Random_Player<T>::misere_Random_Player(T symbol,Board<T>* bptr) : RandomP
 
 template <typename T>
 void misere_Random_Player<T>::getmove(int& x, int& y) {
+    if(this->boardPtr->is_win()) return;
+    else if(this->boardPtr->game_is_over())return;
     x = rand() % this->dimension;  // Random number between 0 and 2
     y = rand() % this->dimension;
 }

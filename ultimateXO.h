@@ -9,6 +9,7 @@ private:
     //this shows the status of each board
     T** status;
     set<int>played;
+    bool end;
 public:
     ultimate_board();
     //checks win on the status board
@@ -63,6 +64,7 @@ ultimate_board<T>::ultimate_board() {
         }
     }
     this->n_moves = 0;
+    this->end = false;
 }
 
 template<typename T>
@@ -80,7 +82,8 @@ bool ultimate_board<T>::update_board(int x, int y, T symbol) {
             played.insert(b);
         }
         display_status();
-    }
+    }else if (x == y && x == -1) this->end = true;
+
     else return false;
     return true;
 }
@@ -150,12 +153,12 @@ bool ultimate_board<T>::is_draw() {
     //if all moves in the main board is played
     //and theres no win in the status board
     //game is a draw
-    return (this->n_moves == 81 && !is_win());
+    return (this->played.size() == 9 && !is_win());
 }
 
 template<typename T>
 bool ultimate_board<T>::game_is_over() {
-    return (is_win() || is_draw());
+    return (is_win() || is_draw() || this->end);
 }
 
 template<typename T>
@@ -205,21 +208,21 @@ ultimate_Player<T>::ultimate_Player(const string& name , T symbol) : Player<T>(n
 
 template<typename T>
 void ultimate_Player<T>::getmove(int& x, int& y) {
+    if(this->boardPtr->game_is_over()) return;
     string choice;
-    cout << "please enter the row of your choice(1-9): ";
-    getline(cin >> ws, choice);
-    while (choice.size() != 1 && isdigit(choice[0])) {
-        cout << "please enter a number that is between(1-9): ";
+    cout << "enter 'return' to return to menu\n";
+    while (choice.size() != 3 || !isdigit(choice[0]) || !isdigit(choice[2])) {
+//        if(!choice.empty())
+        cout << "Enter your move as two numbers \"row column\", separated by a space: ";
         getline(cin >> ws, choice);
+        if(choice == "return"){
+            x = -1;
+            y = -1;
+            return;
+        }
     }
-    x = stoi(choice);
-    cout << "please enter the column of your choice(1-9): ";
-    getline(cin >> ws, choice);
-    while (choice.size() != 1 && isdigit(choice[0])) {
-        cout << "please enter a number that is between(1-9): ";
-        getline(cin >> ws, choice);
-    }
-    y = stoi(choice);
+    x = static_cast<int>(choice[0]) - '0';
+    y = static_cast<int>(choice[2]) - '0';
     --x;--y;
 }
 //---------------------------------------------
@@ -232,6 +235,7 @@ ultimate_Random<T>::ultimate_Random(T symbol) : RandomPlayer<T>(symbol) {
 
 template<typename T>
 void ultimate_Random<T>::getmove(int &x, int &y) {
+    if(this->boardPtr->game_is_over()) return;
     x = rand() % this->dimension;
     y = rand() % this->dimension;
 }

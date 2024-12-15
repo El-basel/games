@@ -37,7 +37,6 @@ private:
 	Word_Board<T>& board;
 public:
 	Word_Tic_Tac_Toe_Random_Player(T symbol, Word_Board<T>& board);
-	T getsymbol();
 	void getmove(int& x, int& y) override;
 	char random_symbol();
 };
@@ -251,13 +250,6 @@ bool Word_Tic_Tac_Toe_Player<T>::is_valid(string text, string player) {
 template <typename T>
 Word_Tic_Tac_Toe_Random_Player<T>::Word_Tic_Tac_Toe_Random_Player(T symbol, Word_Board<T>& board) : RandomPlayer<T>(symbol), board(board) {
 	this->symbol = random_symbol();
-}
-
-template <typename T>
-T Word_Tic_Tac_Toe_Random_Player<T>::getsymbol() {
-	// Randomly select a character from 'a' to 'z'
-	this->symbol = 'A' + (rand() % 26);
-	return this->symbol;
 }
 
 template <typename T>
