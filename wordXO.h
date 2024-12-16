@@ -48,9 +48,9 @@ public:
 template <typename T>
 Word_Board<T>::Word_Board() {
 	this->rows = this->columns = 3;
-	this->board = new T* [this->rows];
+	this->board = new T * [this->rows];
 	for (int i = 0; i < this->rows; i++) {
-		this->board[i] = new T[this->columns] {0};
+		this->board[i] = new T[this->columns]{ 0 };
 	}
 
 	this->n_moves = 0;
@@ -99,21 +99,27 @@ bool Word_Board<T>::is_win() {
 	bool r1 = false, r2 = false, r3 = false;
 
 	if (this->board[0][0] != 0 && this->board[0][1] != 0 && this->board[0][2] != 0 && !r1) {
-		row1 = string(1, this->board[0][0]) + this->board[0][1] + this->board[0][2];
+		row1 += this->board[0][0];
+		row1 += this->board[0][1];
+		row1 += this->board[0][2];
 		r1 = true;
 		if (wordsSet.find(row1) != wordsSet.end()) {
 			return true;
 		}
 	}
 	if (this->board[1][0] != 0 && this->board[1][1] != 0 && this->board[1][2] != 0 && !r2) {
-		row2 = string(1, this->board[1][0]) + this->board[1][1] + this->board[1][2];
+		row2 += this->board[1][0];
+		row2 += this->board[1][1];
+		row2 += this->board[1][2];
 		r2 = true;
 		if (wordsSet.find(row2) != wordsSet.end()) {
 			return true;
 		}
 	}
 	if (this->board[2][0] != 0 && this->board[2][1] != 0 && this->board[2][2] != 0 && !r3) {
-		row3 = string(1, this->board[2][0]) + this->board[2][1] + this->board[2][2];
+		row3 += this->board[2][0];
+		row3 += this->board[2][1];
+		row3 += this->board[2][2];
 		r3 = true;
 		if (wordsSet.find(row3) != wordsSet.end()) {
 			return true;
@@ -125,21 +131,27 @@ bool Word_Board<T>::is_win() {
 	bool c1 = false, c2 = false, c3 = false;
 
 	if (this->board[0][0] != 0 && this->board[1][0] != 0 && this->board[2][0] != 0 && !c1) {
-		col1 = string(1, this->board[0][0]) + this->board[1][0] + this->board[2][0];
+		col1 += this->board[0][0];
+		col1 += this->board[1][0];
+		col1 += this->board[2][0];
 		c1 = true;
 		if (wordsSet.find(col1) != wordsSet.end()) {
 			return true;
 		}
 	}
 	if (this->board[0][1] != 0 && this->board[1][1] != 0 && this->board[2][1] != 0 && !c2) {
-		col2 = string(1, this->board[0][1]) + this->board[1][1] + this->board[2][1];
+		col2 += this->board[0][1];
+		col2 += this->board[1][1];
+		col2 += this->board[2][1];
 		c2 = true;
 		if (wordsSet.find(col2) != wordsSet.end()) {
 			return true;
 		}
 	}
 	if (this->board[0][2] != 0 && this->board[1][2] != 0 && this->board[2][2] != 0 && !c3) {
-		col3 = string(1, this->board[0][2]) + this->board[1][2] + this->board[2][2];
+		col3 += this->board[0][2];
+		col3 += this->board[1][2];
+		col3 += this->board[2][2];
 		c3 = true;
 		if (wordsSet.find(col3) != wordsSet.end()) {
 			return true;
@@ -151,14 +163,18 @@ bool Word_Board<T>::is_win() {
 	bool d1 = false, d2 = false;
 
 	if (this->board[0][0] != 0 && this->board[1][1] != 0 && this->board[2][2] != 0 && !d1) {
-		diag1 = string(1, this->board[0][0]) + this->board[1][1] + this->board[2][2];
+		diag1 += this->board[0][0];
+		diag1 += this->board[1][1];
+		diag1 += this->board[2][2];
 		d1 = true;
 		if (wordsSet.find(diag1) != wordsSet.end()) {
 			return true;
 		}
 	}
 	if (this->board[0][2] != 0 && this->board[1][1] != 0 && this->board[2][0] != 0 && !d2) {
-		diag2 = string(1, this->board[0][2]) + this->board[1][1] + this->board[2][0];
+		diag2 += this->board[0][2];
+		diag2 += this->board[1][1];
+		diag2 += this->board[2][0];
 		d2 = true;
 		if (wordsSet.find(diag2) != wordsSet.end()) {
 			return true;
@@ -258,7 +274,7 @@ void Word_Tic_Tac_Toe_Random_Player<T>::getmove(int& x, int& y) {
 		x = rand() % 3;
 		y = rand() % 3;
 	} while (board.getBoard()[x][y] != 0);
-	
+
 	this->symbol = random_symbol();
 }
 
