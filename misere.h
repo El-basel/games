@@ -156,7 +156,7 @@ void misere_Player<T>::getmove(int& x, int& y) {
     if(this->boardPtr->is_win()) return;
     else if(this->boardPtr->game_is_over())return;
     string choice;
-    while (choice.size() != 3 || !isdigit(choice[0]) || !isdigit(choice[2])) {
+    while (choice.size() != 3 || !isdigit(choice[0]) || !isdigit(choice[2])|| isdigit(choice[1])) {
         cout << "enter 'return' to return to menu\n";
         cout << "Enter your move as two numbers \"row column\", separated by a space: ";
         getline(cin, choice);
