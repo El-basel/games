@@ -94,7 +94,7 @@ void misere(){
     }
     switch(type2) {
         case 1:
-            players[1] = new misere_Player<char>(player1Name, 'O',B);
+            players[1] = new misere_Player<char>(player2Name, 'O',B);
             break;
         case 2:
             players[1] = new misere_Random_Player<char>('O',B);
