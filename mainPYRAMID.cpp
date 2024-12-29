@@ -24,7 +24,7 @@ int main() {
         players[0] = new Pyramid_X_O_Player<char>(playerXName, 'X');
         break;
     case 2:
-        players[0] = new Pyramid_X_O_Random_Player<char>('X');
+        players[0] = new Pyramid_X_O_Random_Player<char>('X', *Board);
         break;
     default:
         cout << "Invalid choice for Player 1. Exiting the game.\n";
@@ -41,10 +41,10 @@ int main() {
 
     switch (choice) {
     case 1:
-        players[1] = new Pyramid_X_O_Player<char>(playerXName, 'O');
+        players[1] = new Pyramid_X_O_Player<char>(playerYName, 'O');
         break;
     case 2:
-        players[1] = new Pyramid_X_O_Random_Player<char>('O');
+        players[1] = new Pyramid_X_O_Random_Player<char>('O', *Board);
         break;
     default:
         cout << "Invalid choice for Player 1. Exiting the game.\n";
