@@ -8,6 +8,7 @@
 #include "wordXO.h"
 #include "4x4TicTacToe.h"
 #include "ultimateXO.h"
+#include "misereAI.h"
 
 void getNameAndType(std::string& player1, std::string& player2, int& type1 , int& type2)
 {
@@ -32,6 +33,32 @@ void getNameAndType(std::string& player1, std::string& player2, int& type1 , int
         cout << "2. Random Computer\n";
         std::getline(std::cin >> std::ws, type2String);
     } while(type2String.length() > 1 || type2String[0] > '2' || type2String[0] < '1');
+    type2 = type2String[0] - '0';
+}
+void getNameAndType2(std::string& player1, std::string& player2, int& type1 , int& type2) {
+    std::string type1String, type2String;
+    std::cout << "Choose Player 1 Name: ";
+    std::cin >> player1;
+
+    do {
+        std::cout << "Choose Player 1 type: \n";
+        std::cout << "1. Human\n";
+        std::cout << "2. Random Computer\n";
+        std::cout << "3. AI\n";
+        std::getline(std::cin >> std::ws, type1String);
+    } while(type1String.length() > 1 || type1String[0] > '3' || type1String[0] < '1');
+    type1 = type1String[0] - '0';
+
+    std::cout << "Choose Player 2 Name: ";
+    std::cin >> player2;
+
+    do {
+        std::cout << "Choose Player 2 type: \n";
+        std::cout << "1. Human\n";
+        std::cout << "2. Random Computer\n";
+        std::cout << "3. AI\n";
+        std::getline(std::cin >> std::ws, type2String);
+    } while(type2String.length() > 1 || type2String[0] > '3' || type2String[0] < '1');
     type2 = type2String[0] - '0';
 }
 void ultimateXO(){
@@ -75,32 +102,40 @@ void ultimateXO(){
     }
 }
 
-void misere(){
+void misere() {
     Player<char>* players[2];
     Board<char>* B = new misere_board<char>();
-    string player1Name, player2Name;
-    int type1,type2;
-    getNameAndType(player1Name,player2Name, type1, type2);
+    std::string player1Name, player2Name;
+    int type1, type2;
+    getNameAndType2(player2Name, player1Name, type1, type2);
     switch(type1) {
         case 1:
-            players[0] = new misere_Player<char>(player1Name, 'X',B);
+            players[0] = new misere_Player<char>(player1Name, 'X', B);
             break;
         case 2:
-            players[0] = new misere_Random_Player<char>('X',B);
+            players[0] = new misere_Random_Player<char>(player1Name, 'X', B);
+            break;
+        case 3:
+            players[0] = new misereAI<char>(player1Name, 'X');
+            players[0]->setBoard(B);
             break;
         default:
-            cout << "Invalid choice for Player 1. Exiting the game.\n";
+            std::cout << "Invalid choice for Player 1. Exiting the game.\n";
             return;
     }
     switch(type2) {
         case 1:
-            players[1] = new misere_Player<char>(player2Name, 'O',B);
+            players[1] = new misere_Player<char>(player2Name, 'O', B);
             break;
         case 2:
-            players[1] = new misere_Random_Player<char>('O',B);
+            players[1] = new misere_Random_Player<char>(player2Name, 'O', B);
+            break;
+        case 3:
+            players[1] = new misereAI<char>(player2Name, 'O');
+            players[1]->setBoard(B);
             break;
         default:
-            cout << "Invalid choice for Player 2. Exiting the game.\n";
+            std::cout << "Invalid choice for Player 2. Exiting the game.\n";
             return;
     }
     GameManager<char> x_o_game(B, players);

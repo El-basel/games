@@ -31,7 +31,7 @@ public:
 template <typename T>
 class misere_Random_Player : public RandomPlayer<T>{
 public:
-    misere_Random_Player (T symbol,Board<T>* bptr);
+    misere_Random_Player (string name,T symbol,Board<T>* bptr);
     void getmove(int &x, int &y) ;
 };
 
@@ -65,8 +65,8 @@ misere_board<T>::misere_board() {
 
 template <typename T>
 bool misere_board<T>::update_board(int x, int y, T symbol) {
-    if(this->win) return true;
-    else if(x==y && x == -1){
+//    if(this->win) return true;
+    if(x==y && x == -1){
         this->end = true;
         return true;
     }
@@ -76,12 +76,13 @@ bool misere_board<T>::update_board(int x, int y, T symbol) {
         if (symbol == 0){
             this->n_moves--;
             this->board[x][y] = 0;
+            this->win = false;
         }
         else {
             this->n_moves++;
             this->board[x][y] = toupper(symbol);
         }
-        cout << "\x1b[8A";
+//        cout << "\x1b[8A";
         return true;
     }
     return false;
@@ -110,18 +111,20 @@ void misere_board<T>::display_board() {
 template <typename T>
 bool misere_board<T>::is_win() {
     // Check rows and columns
-    if(win) return true;
+//    if(win) return true;
     for (int i = 0; i < this->rows; i++) {
         if ((this->board[i][0] == this->board[i][1] && this->board[i][1] == this->board[i][2] && this->board[i][0] != 0) ||
             (this->board[0][i] == this->board[1][i] && this->board[1][i] == this->board[2][i] && this->board[0][i] != 0)) {
-            win = true;
+//            win = true;
+            return true;
         }
     }
 
     // Check diagonals
     if ((this->board[0][0] == this->board[1][1] && this->board[1][1] == this->board[2][2] && this->board[0][0] != 0) ||
         (this->board[0][2] == this->board[1][1] && this->board[1][1] == this->board[2][0] && this->board[0][2] != 0)) {
-        win = true;
+//        win = true;
+        return true;
     }
     return false;
 }
@@ -160,10 +163,10 @@ void misere_Player<T>::getmove(int& x, int& y) {
         cout << "enter 'return' to return to menu\n";
         cout << "Enter your move as two numbers \"row column\", separated by a space: ";
         getline(cin, choice);
-        cout << "\x1b[1A";
-        cout << "\x1b[K";
-        cout << "\x1b[1A";
-        cout << "\x1b[K";
+//        cout << "\x1b[1A";
+//        cout << "\x1b[K";
+//        cout << "\x1b[1A";
+//        cout << "\x1b[K";
         if(choice == "return"){
             x = -1;
             y = -1;
@@ -176,9 +179,9 @@ void misere_Player<T>::getmove(int& x, int& y) {
 
 // Constructor for misere_Random_Player
 template <typename T>
-misere_Random_Player<T>::misere_Random_Player(T symbol,Board<T>* bptr) : RandomPlayer<T>(symbol) {
+misere_Random_Player<T>::misere_Random_Player(string name,T symbol,Board<T>* bptr) : RandomPlayer<T>(symbol) {
     this->dimension = 3;
-    this->name = "Random Computer Player";
+    this->name = name;
     this->setBoard(bptr);
     srand(static_cast<unsigned int>(time(0)));  // Seed the random number generator
 }
